@@ -1,0 +1,17 @@
+business_days:
+  - monday
+  - tuesday
+  - wednesday
+  - thursday
+  - friday
+
+holidays:
+  - January 1st, 2013
+  - March 29th, 2013
+  - April 1st, 2013
+  - May 6th, 2013
+  - May 27th, 2013
+  - August 26th, 2013
+  - December 25th, 2013
+  - December 26th, 2013
+
