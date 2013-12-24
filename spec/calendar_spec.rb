@@ -102,6 +102,11 @@ describe BankTime::Calendar do
         let(:day) { date_class.parse("Tuesday 1st Jan, 2013") }
         it { should be_false }
       end
+
+      context "when given a datetime that is not a business day" do
+        let(:day) { DateTime.parse("9am, Tuesday 1st Jan, 2013") }
+        it { should be_false }
+      end
     end
 
     describe "#roll_forward" do
