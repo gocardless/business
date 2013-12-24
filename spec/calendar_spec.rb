@@ -84,27 +84,22 @@ describe BankTime::Calendar do
   shared_examples "common" do
     describe "#business_day?" do
       let(:calendar) do
-        BankTime::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
+        BankTime::Calendar.new(holidays: ["9am, Tuesday 1st Jan, 2013"])
       end
       subject { calendar.business_day?(day) }
 
       context "when given a business day" do
-        let(:day) { date_class.parse("Wednesday 2nd Jan, 2013") }
+        let(:day) { date_class.parse("9am, Wednesday 2nd Jan, 2013") }
         it { should be_true }
       end
 
       context "when given a non-business day" do
-        let(:day) { date_class.parse("Saturday 5th Jan, 2013") }
+        let(:day) { date_class.parse("9am, Saturday 5th Jan, 2013") }
         it { should be_false }
       end
 
       context "when given a business day that is a holiday" do
-        let(:day) { date_class.parse("Tuesday 1st Jan, 2013") }
-        it { should be_false }
-      end
-
-      context "when given a datetime that is not a business day" do
-        let(:day) { DateTime.parse("9am, Tuesday 1st Jan, 2013") }
+        let(:day) { date_class.parse("9am, Tuesday 1st Jan, 2013") }
         it { should be_false }
       end
     end
@@ -252,6 +247,13 @@ describe BankTime::Calendar do
   context "(using Time objects)" do
     let(:date_class) { Time }
     let(:day_interval) { 3600 * 24 }
+
+    it_behaves_like "common"
+  end
+
+  context "(using DateTime objects)" do
+    let(:date_class) { DateTime }
+    let(:day_interval) { 1 }
 
     it_behaves_like "common"
   end
