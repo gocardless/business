@@ -32,7 +32,7 @@ module BankTime
     # Return true if the date given is a business day (typically that means a
     # non-weekend day) and not a holiday.
     def business_day?(date)
-      date = date.to_date if date.is_a?(Time)
+      date = date.to_date
       return false unless business_days.include?(date.strftime('%a').downcase)
       return false if holidays.include?(date)
       true
