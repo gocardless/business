@@ -235,6 +235,48 @@ describe BankTime::Calendar do
         it { should == date - (delta + 1) * day_interval }
       end
     end
+
+    describe "#business_days_between" do
+      let(:calendar) do
+        BankTime::Calendar.new(holidays: ["Thursday 12th Jun, 2014"])
+      end
+      subject { calendar.business_days_between(date_1, date_2) }
+
+      context "starting from a business day" do
+        let(:date_1) { date_class.parse("Monday 2nd Jun, 2014") }
+        context "in a period that includes only business days" do
+          let(:date_2) { date_class.parse("Thursday 5th Jun, 2014") }
+          it { should == 4 }
+        end
+
+        context "in a period that includes a weekend" do
+          let(:date_2) { date_class.parse("Tuesday 10th Jun, 2014") }
+          it { should == 7 }
+        end
+
+        context "in a period that finishes on a non-business day" do
+          let(:date_2) { date_class.parse("Sunday 8th Jun, 2014") }
+          it { should == 5 }
+        end
+
+        context "in a period that includes a holiday day" do
+          let(:date_2) { date_class.parse("Friday 13th Jun, 2014") }
+          it { should == 9 }
+        end
+      end
+
+      context "starting from a non-business day" do
+        let(:date_1) { date_class.parse("Saturday 7th Jun, 2014") }
+        context "in a period that includes no business days" do
+          let(:date_2) { date_class.parse("Sunday 8th Jun, 2014") }
+          it { should == 0 }
+        end
+        context "in a period that includes business days" do
+          let(:date_2) { date_class.parse("Tuesday 10th Jun, 2014") }
+          it { should == 2 }
+        end
+      end
+    end
   end
 
   context "(using Date objects)" do
