@@ -95,12 +95,19 @@ module BankTime
     end
 
     # Count the number of business days between two dates.
-    # This method counts from start of date1 to end of date2. So,
-    # business_days_between(mon, weds) = 3 (assuming new holidays)
+    # This method counts from start of date1 to start of date2. So,
+    # business_days_between(mon, weds) = 2 (assuming new holidays)
     def business_days_between(date1, date2)
-      date1 = date1.to_date
-      date2 = date2.to_date
-      (date1..date2).select { |a| business_day?(a) }.count
+      date1, date2 = date1.to_date, date2.to_date
+
+      # Work out number of weeks and remaining days
+      w, r = (date2 - date1).to_i.divmod(7)
+
+      c = w * business_days.length
+      c -= holidays.select { |h| h < date2 - r && h >= date1 && business_days.include?(h.strftime('%a').downcase) }.count
+      c += (date2-r..date2-1).select { |a| business_day?(a) }.count if r > 0
+
+      return c
     end
 
     def day_interval_for(date)

@@ -237,43 +237,148 @@ describe BankTime::Calendar do
     end
 
     describe "#business_days_between" do
-      let(:calendar) do
-        BankTime::Calendar.new(holidays: ["Thursday 12th Jun, 2014"])
+      let(:holidays) do
+        ["Thu 12/6/2014", "Wed 18/6/2014", "Fri 20/6/2014", "Sun 22/6/2014"]
       end
+      let(:calendar) { BankTime::Calendar.new(holidays: holidays) }
       subject { calendar.business_days_between(date_1, date_2) }
 
-      context "starting from a business day" do
-        let(:date_1) { date_class.parse("Monday 2nd Jun, 2014") }
-        context "in a period that includes only business days" do
-          let(:date_2) { date_class.parse("Thursday 5th Jun, 2014") }
-          it { should == 4 }
+
+      context "starting on a business day" do
+        let(:date_1) { date_class.parse("Mon 2/6/2014") }
+
+        context "ending on a business day" do
+          context "including only business days" do
+            let(:date_2) { date_class.parse("Thu 5/6/2014") }
+            it { should == 3 }
+          end
+
+          context "including only business days & weekend days" do
+            let(:date_2) { date_class.parse("Mon 9/6/2014") }
+            it { should == 5 }
+          end
+
+          context "including only business days & holidays" do
+            let(:date_1) { date_class.parse("Mon 9/6/2014") }
+            let(:date_2) { date_class.parse("Fri 13/6/2014") }
+            it { should == 3 }
+          end
+
+          context "including business, weekend days, and holidays" do
+            let(:date_2) { date_class.parse("Fri 13/6/2014") }
+            it { should == 8 }
+          end
         end
 
-        context "in a period that includes a weekend" do
-          let(:date_2) { date_class.parse("Tuesday 10th Jun, 2014") }
-          it { should == 7 }
+        context "ending on a weekend day" do
+          context "including only business days & weekend days" do
+            let(:date_2) { date_class.parse("Sun 8/6/2014") }
+            it { should == 5 }
+          end
+
+          context "including business, weekend days, and holidays" do
+            let(:date_2) { date_class.parse("Sat 14/6/2014") }
+            it { should == 9 }
+          end
         end
 
-        context "in a period that finishes on a non-business day" do
-          let(:date_2) { date_class.parse("Sunday 8th Jun, 2014") }
-          it { should == 5 }
-        end
+        context "ending on a holiday" do
+          context "including only business days & holidays" do
+            let(:date_1) { date_class.parse("Mon 9/6/2014") }
+            let(:date_2) { date_class.parse("Thu 12/6/2014") }
+            it { should == 3 }
+          end
 
-        context "in a period that includes a holiday day" do
-          let(:date_2) { date_class.parse("Friday 13th Jun, 2014") }
-          it { should == 9 }
+          context "including business, weekend days, and holidays" do
+            let(:date_2) { date_class.parse("Thu 12/6/2014") }
+            it { should == 8 }
+          end
         end
       end
 
-      context "starting from a non-business day" do
-        let(:date_1) { date_class.parse("Saturday 7th Jun, 2014") }
-        context "in a period that includes no business days" do
-          let(:date_2) { date_class.parse("Sunday 8th Jun, 2014") }
-          it { should == 0 }
+      context "starting on a weekend" do
+        let(:date_1) { date_class.parse("Sat 7/6/2014") }
+
+        context "ending on a business day" do
+
+          context "including only business days & weekend days" do
+            let(:date_2) { date_class.parse("Mon 9/6/2014") }
+            it { should == 0 }
+          end
+
+          context "including business, weekend days, and holidays" do
+            let(:date_2) { date_class.parse("Fri 13/6/2014") }
+            it { should == 3 }
+          end
         end
-        context "in a period that includes business days" do
-          let(:date_2) { date_class.parse("Tuesday 10th Jun, 2014") }
+
+        context "ending on a weekend day" do
+          context "including only business days & weekend days" do
+            let(:date_2) { date_class.parse("Sun 8/6/2014") }
+            it { should == 0 }
+          end
+
+          context "including business, weekend days, and holidays" do
+            let(:date_2) { date_class.parse("Sat 14/6/2014") }
+            it { should == 4 }
+          end
+        end
+
+        context "ending on a holiday" do
+          context "including business, weekend days, and holidays" do
+            let(:date_2) { date_class.parse("Thu 12/6/2014") }
+            it { should == 3 }
+          end
+        end
+      end
+
+      context "starting on a holiday" do
+        let(:date_1) { date_class.parse("Thu 12/6/2014") }
+
+        context "ending on a business day" do
+
+          context "including only business days & holidays" do
+            let(:date_2) { date_class.parse("Fri 13/6/2014") }
+            it { should == 0 }
+          end
+
+          context "including business, weekend days, and holidays" do
+            let(:date_2) { date_class.parse("Thu 19/6/2014") }
+            it { should == 3 }
+          end
+        end
+
+        context "ending on a weekend day" do
+          context "including business, weekend days, and holidays" do
+            let(:date_2) { date_class.parse("Sun 15/6/2014") }
+            it { should == 1 }
+          end
+        end
+
+        context "ending on a holiday" do
+          context "including only business days & holidays" do
+            let(:date_1) { date_class.parse("Wed 18/6/2014") }
+            let(:date_2) { date_class.parse("Fri 20/6/2014") }
+            it { should == 1 }
+          end
+
+          context "including business, weekend days, and holidays" do
+            let(:date_2) { date_class.parse("Wed 18/6/2014") }
+            it { should == 3 }
+          end
+        end
+      end
+
+      context "if a calendar has a holiday on a non-working (weekend) day" do
+        context "for a range less than a week long" do
+          let(:date_1) { date_class.parse("Thu 19/6/2014") }
+          let(:date_2) { date_class.parse("Tue 24/6/2014") }
           it { should == 2 }
+        end
+        context "for a range more than a week long" do
+          let(:date_1) { date_class.parse("Mon 16/6/2014") }
+          let(:date_2) { date_class.parse("Tue 24/6/2014") }
+          it { should == 4 }
         end
       end
     end
