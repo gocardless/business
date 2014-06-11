@@ -1,17 +1,20 @@
 # Business
 
+[![Gem version](https://badge.fury.io/rb/business.svg)](http://badge.fury.io/rb/business)
+[![Build status](https://travis-ci.org/gocardless/business.svg?branch=master)](https://travis-ci.org/gocardless/business)
+
 Date calculations based on business calendars.
 
 
 ## But other libraries already do this
 
-Another gem, business_time, also exists for this purpose. We previously used
-business_time, but encountered several issues that prompted us to create
-business.
+Another gem, [business_time](https://github.com/bokmann/business_time), also
+exists for this purpose. We previously used business_time, but encountered
+several issues that prompted us to start business.
 
 Firstly, business_time works by monkey-patching `Date`, `Time`, and `FixNum`.
 While this enables syntax like `Time.now + 1.business_day`, it means that all
-configuration has to be global. GoCardless handles payments across multiple
+configuration has to be global. GoCardless handles payments across several
 geographies, so being able to work with multiple working-day calendars is
 essential for us. Business provides a simple `Calendar` class, that is
 initialized with a configuration that specifies which days of the week are
@@ -38,10 +41,10 @@ calendar = Business::Calendar.new(
 )
 ```
 
-A few calendar configs are bundled with the gem. Load them by calling the
-`load` class method on `Calendar`. The `load_cached` variant of this method
-caches the calendars by name after loading them, to avoid reading and
-parsing the config file multiple times.
+A few calendar configs are bundled with the gem (see lib/business/data for
+details). Load them by calling the `load` class method on `Calendar`. The
+`load_cached` variant of this method caches the calendars by name after loading
+them, to avoid reading and parsing the config file multiple times.
 
 ```ruby
 calendar = Business::Calendar.load("weekdays")
