@@ -6,7 +6,7 @@ module Business
       path = File.join(File.dirname(__FILE__), 'data', "#{calendar}.yml")
       raise "No such calendar '#{calendar}'" unless File.exists?(path)
       yaml = YAML.load_file(path)
-      self.new(holidays: yaml['holidays'], business_days: yaml['business_days'])
+      self.new(holidays: yaml['holidays'], working_days: yaml['working_days'])
     end
 
     @lock = Mutex.new
@@ -22,18 +22,18 @@ module Business
 
     DAY_NAMES = %( mon tue wed thu fri sat sun )
 
-    attr_reader :business_days, :holidays
+    attr_reader :working_days, :holidays
 
     def initialize(config)
-      set_business_days(config[:business_days])
+      set_working_days(config[:working_days])
       set_holidays(config[:holidays])
     end
 
-    # Return true if the date given is a business day (typically that means a
+    # Return true if the date given is a business day (typically that meanss a
     # non-weekend day) and not a holiday.
     def business_day?(date)
       date = date.to_date
-      return false unless business_days.include?(date.strftime('%a').downcase)
+      return false unless working_days.include?(date.strftime('%a').downcase)
       return false if holidays.include?(date)
       true
     end
@@ -114,13 +114,13 @@ module Business
       num_full_weeks, remaining_days = (date2 - date1).to_i.divmod(7)
 
       # First estimate for full week range based on # biz days in a week
-      num_biz_days = num_full_weeks * business_days.length
+      num_biz_days = num_full_weeks * working_days.length
 
       full_weeks_range = (date1...(date2 - remaining_days))
       num_biz_days -= holidays.count do |holiday|
         in_range = full_weeks_range.cover?(holiday)
         # Only pick a holiday if its on a working day (e.g., not a weekend)
-        on_biz_day = business_days.include?(holiday.strftime('%a').downcase)
+        on_biz_day = working_days.include?(holiday.strftime('%a').downcase)
         in_range && on_biz_day
       end
 
@@ -133,9 +133,9 @@ module Business
       date.is_a?(Date) ? 1 : 3600 * 24
     end
 
-    # Internal method for assigning business days from a calendar config.
-    def set_business_days(business_days)
-      @business_days = (business_days || default_business_days).map do |day|
+    # Internal method for assigning working days from a calendar config.
+    def set_working_days(working_days)
+      @working_days = (working_days || default_working_days).map do |day|
         day.downcase.strip[0..2].tap do |normalised_day|
           raise "Invalid day #{day}" unless DAY_NAMES.include?(normalised_day)
         end
@@ -147,8 +147,8 @@ module Business
       @holidays = (holidays || []).map { |holiday| Date.parse(holiday) }
     end
 
-    # If no business days are provided in the calendar config, these are used.
-    def default_business_days
+    # If no working days are provided in the calendar config, these are used.
+    def default_working_days
       %w( mon tue wed thu fri )
     end
   end

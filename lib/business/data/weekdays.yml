@@ -1,4 +1,4 @@
-business_days:
+working_days:
   - monday
   - tuesday
   - wednesday

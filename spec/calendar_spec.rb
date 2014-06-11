@@ -22,36 +22,36 @@ describe Business::Calendar do
     end
   end
 
-  describe "#set_business_days" do
+  describe "#set_working_days" do
     let(:calendar) { Business::Calendar.new({}) }
-    let(:business_days) { [] }
-    subject { calendar.set_business_days(business_days) }
+    let(:working_days) { [] }
+    subject { calendar.set_working_days(working_days) }
 
-    context "when given valid business days" do
-      let(:business_days) { %w( mon fri ) }
+    context "when given valid working days" do
+      let(:working_days) { %w( mon fri ) }
       before { subject }
 
       it "assigns them" do
-        expect(calendar.business_days).to eq(business_days)
+        expect(calendar.working_days).to eq(working_days)
       end
 
       context "that are unnormalised" do
-        let(:business_days) { %w( Monday Friday ) }
+        let(:working_days) { %w( Monday Friday ) }
         it "normalises them" do
-          expect(calendar.business_days).to eq(%w( mon fri ))
+          expect(calendar.working_days).to eq(%w( mon fri ))
         end
       end
     end
 
     context "when given an invalid business day" do
-      let(:business_days) { %w( Notaday ) }
+      let(:working_days) { %w( Notaday ) }
       specify { expect{ subject }.to raise_exception }
     end
 
     context "when given nil" do
-      let(:business_days) { nil }
+      let(:working_days) { nil }
       it "uses the default business days" do
-        expect(calendar.business_days).to eq(calendar.default_business_days)
+        expect(calendar.working_days).to eq(calendar.default_working_days)
       end
     end
   end
