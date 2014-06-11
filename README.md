@@ -5,7 +5,6 @@
 
 Date calculations based on business calendars.
 
-
 ## Documentation
 
 ### Getting started
@@ -102,3 +101,4 @@ calculations as well makes the code significantly more complex. We chose to
 avoid this extra complexity by sticking solely to date-based mathematics.
 
 
+![I'm late for business](http://3.bp.blogspot.com/-aq4iOz2OZzs/Ty8xaQwMhtI/AAAAAAAABrM/-vn4tcRA9-4/s1600/daily-morning-awesomeness-243.jpeg)
