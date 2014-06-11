@@ -15,7 +15,7 @@ $ gem install business
 
 ### Getting started
 
-Get stareted with business by creating an instance of the calendar class,
+Get started with business by creating an instance of the calendar class,
 passing in a hash that specifies with days of the week are considered working
 days, and which days are holidays.
 
