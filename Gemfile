@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in bank_time.gemspec
+# Specify your gem's dependencies in business.gemspec
 gemspec

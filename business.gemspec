@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'bank_time/version'
+require 'business/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "bank_time"
-  spec.version       = BankTime::VERSION
+  spec.name          = "business"
+  spec.version       = Business::VERSION
   spec.authors       = ["Harry Marr"]
   spec.email         = ["engineering@gocardless.com"]
-  spec.description   = %q{Date calculations based on bank calendars}
-  spec.summary       = %q{Date calculations based on bank calendars}
-  spec.homepage      = "https://github.com/gocardless/bank_time"
+  spec.description   = %q{Date calculations based on business calendars}
+  spec.summary       = %q{Date calculations based on business calendars}
+  spec.homepage      = "https://github.com/gocardless/business"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }

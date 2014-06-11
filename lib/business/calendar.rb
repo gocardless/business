@@ -1,6 +1,6 @@
 require 'yaml'
 
-module BankTime
+module Business
   class Calendar
     def self.load(calendar)
       path = File.join(File.dirname(__FILE__), 'data', "#{calendar}.yml")

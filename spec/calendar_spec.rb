@@ -1,10 +1,10 @@
-require "bank_time/calendar"
+require "business/calendar"
 require "time"
 
-describe BankTime::Calendar do
+describe Business::Calendar do
   describe ".load" do
     context "when given a valid calendar" do
-      subject { BankTime::Calendar.load("weekdays") }
+      subject { Business::Calendar.load("weekdays") }
 
       it "loads the yaml file" do
         YAML.should_receive(:load_file) do |path|
@@ -13,17 +13,17 @@ describe BankTime::Calendar do
         subject
       end
 
-      it { should be_a BankTime::Calendar }
+      it { should be_a Business::Calendar }
     end
 
     context "when given an invalid calendar" do
-      subject { BankTime::Calendar.load("invalid-calendar") }
+      subject { Business::Calendar.load("invalid-calendar") }
       specify { ->{ subject }.should raise_error }
     end
   end
 
   describe "#set_business_days" do
-    let(:calendar) { BankTime::Calendar.new({}) }
+    let(:calendar) { Business::Calendar.new({}) }
     let(:business_days) { [] }
     subject { calendar.set_business_days(business_days) }
 
@@ -57,7 +57,7 @@ describe BankTime::Calendar do
   end
 
   describe "#set_holidays" do
-    let(:calendar) { BankTime::Calendar.new({}) }
+    let(:calendar) { Business::Calendar.new({}) }
     let(:holidays) { [] }
     before { calendar.set_holidays(holidays) }
     subject { calendar.holidays }
@@ -84,7 +84,7 @@ describe BankTime::Calendar do
   shared_examples "common" do
     describe "#business_day?" do
       let(:calendar) do
-        BankTime::Calendar.new(holidays: ["9am, Tuesday 1st Jan, 2013"])
+        Business::Calendar.new(holidays: ["9am, Tuesday 1st Jan, 2013"])
       end
       subject { calendar.business_day?(day) }
 
@@ -106,7 +106,7 @@ describe BankTime::Calendar do
 
     describe "#roll_forward" do
       let(:calendar) do
-        BankTime::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
+        Business::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
       end
       subject { calendar.roll_forward(date) }
 
@@ -130,7 +130,7 @@ describe BankTime::Calendar do
 
     describe "#roll_backward" do
       let(:calendar) do
-        BankTime::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
+        Business::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
       end
       subject { calendar.roll_backward(date) }
 
@@ -154,7 +154,7 @@ describe BankTime::Calendar do
 
     describe "#next_business_day" do
       let(:calendar) do
-        BankTime::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
+        Business::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
       end
       subject { calendar.next_business_day(date) }
 
@@ -178,7 +178,7 @@ describe BankTime::Calendar do
 
     describe "#add_business_days" do
       let(:calendar) do
-        BankTime::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
+        Business::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
       end
       let(:delta) { 2 }
       subject { calendar.add_business_days(date, delta) }
@@ -208,7 +208,7 @@ describe BankTime::Calendar do
 
     describe "#subtract_business_days" do
       let(:calendar) do
-        BankTime::Calendar.new(holidays: ["Thursday 3rd Jan, 2013"])
+        Business::Calendar.new(holidays: ["Thursday 3rd Jan, 2013"])
       end
       let(:delta) { 2 }
       subject { calendar.subtract_business_days(date, delta) }
@@ -240,7 +240,7 @@ describe BankTime::Calendar do
       let(:holidays) do
         ["Thu 12/6/2014", "Wed 18/6/2014", "Fri 20/6/2014", "Sun 22/6/2014"]
       end
-      let(:calendar) { BankTime::Calendar.new(holidays: holidays) }
+      let(:calendar) { Business::Calendar.new(holidays: holidays) }
       subject { calendar.business_days_between(date_1, date_2) }
 
 
