@@ -8,9 +8,10 @@ Gem::Specification.new do |spec|
   spec.version       = Business::VERSION
   spec.authors       = ["Harry Marr"]
   spec.email         = ["engineering@gocardless.com"]
-  spec.description   = %q{Date calculations based on business calendars}
   spec.summary       = %q{Date calculations based on business calendars}
+  spec.description   = %q{Date calculations based on business calendars}
   spec.homepage      = "https://github.com/gocardless/business"
+  spec.licenses      = ["MIT"]
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
