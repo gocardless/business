@@ -7,18 +7,18 @@ describe Business::Calendar do
       subject { Business::Calendar.load("weekdays") }
 
       it "loads the yaml file" do
-        YAML.should_receive(:load_file) do |path|
-          path.should match(/weekdays\.yml$/)
-        end.and_return({})
+        expect(YAML).to receive(:load_file) { |path|
+          expect(path).to match(/weekdays\.yml$/)
+        }.and_return({})
         subject
       end
 
-      it { should be_a Business::Calendar }
+      it { is_expected.to be_a Business::Calendar }
     end
 
     context "when given an invalid calendar" do
       subject { Business::Calendar.load("invalid-calendar") }
-      specify { ->{ subject }.should raise_error }
+      specify { expect{ subject }.to raise_error }
     end
   end
 
@@ -32,26 +32,26 @@ describe Business::Calendar do
       before { subject }
 
       it "assigns them" do
-        calendar.business_days.should == business_days
+        expect(calendar.business_days).to eq(business_days)
       end
 
       context "that are unnormalised" do
         let(:business_days) { %w( Monday Friday ) }
         it "normalises them" do
-          calendar.business_days.should == %w( mon fri )
+          expect(calendar.business_days).to eq(%w( mon fri ))
         end
       end
     end
 
     context "when given an invalid business day" do
       let(:business_days) { %w( Notaday ) }
-      specify { ->{ subject }.should raise_exception }
+      specify { expect{ subject }.to raise_exception }
     end
 
     context "when given nil" do
       let(:business_days) { nil }
       it "uses the default business days" do
-        calendar.business_days.should == calendar.default_business_days
+        expect(calendar.business_days).to eq(calendar.default_business_days)
       end
     end
   end
@@ -65,16 +65,16 @@ describe Business::Calendar do
     context "when given valid business days" do
       let(:holidays) { ["1st Jan, 2013"] }
 
-      it { should_not be_empty }
+      it { is_expected.not_to be_empty }
 
       it "converts them to Date objects" do
-        subject.each { |h| h.should be_a Date }
+        subject.each { |h| expect(h).to be_a Date }
       end
     end
 
     context "when given nil" do
       let(:holidays) { nil }
-      it { should be_empty }
+      it { is_expected.to be_empty }
     end
   end
 
@@ -90,17 +90,17 @@ describe Business::Calendar do
 
       context "when given a business day" do
         let(:day) { date_class.parse("9am, Wednesday 2nd Jan, 2013") }
-        it { should be_true }
+        it { is_expected.to be_truthy }
       end
 
       context "when given a non-business day" do
         let(:day) { date_class.parse("9am, Saturday 5th Jan, 2013") }
-        it { should be_false }
+        it { is_expected.to be_falsey }
       end
 
       context "when given a business day that is a holiday" do
         let(:day) { date_class.parse("9am, Tuesday 1st Jan, 2013") }
-        it { should be_false }
+        it { is_expected.to be_falsey }
       end
     end
 
@@ -112,18 +112,18 @@ describe Business::Calendar do
 
       context "given a business day" do
         let(:date) { date_class.parse("Wednesday 2nd Jan, 2013") }
-        it { should == date }
+        it { is_expected.to eq(date) }
       end
 
       context "given a non-business day" do
         context "with a business day following it" do
           let(:date) { date_class.parse("Tuesday 1st Jan, 2013") }
-          it { should == date + day_interval }
+          it { is_expected.to eq(date + day_interval) }
         end
 
         context "followed by another non-business day" do
           let(:date) { date_class.parse("Saturday 5th Jan, 2013") }
-          it { should == date + 2 * day_interval }
+          it { is_expected.to eq(date + 2 * day_interval) }
         end
       end
     end
@@ -136,18 +136,18 @@ describe Business::Calendar do
 
       context "given a business day" do
         let(:date) { date_class.parse("Wednesday 2nd Jan, 2013") }
-        it { should == date }
+        it { is_expected.to eq(date) }
       end
 
       context "given a non-business day" do
         context "with a business day preceeding it" do
           let(:date) { date_class.parse("Tuesday 1st Jan, 2013") }
-          it { should == date - day_interval }
+          it { is_expected.to eq(date - day_interval) }
         end
 
         context "preceeded by another non-business day" do
           let(:date) { date_class.parse("Sunday 6th Jan, 2013") }
-          it { should == date - 2 * day_interval }
+          it { is_expected.to eq(date - 2 * day_interval) }
         end
       end
     end
@@ -160,18 +160,18 @@ describe Business::Calendar do
 
       context "given a business day" do
         let(:date) { date_class.parse("Wednesday 2nd Jan, 2013") }
-        it { should == date + day_interval }
+        it { is_expected.to eq(date + day_interval) }
       end
 
       context "given a non-business day" do
         context "with a business day following it" do
           let(:date) { date_class.parse("Tuesday 1st Jan, 2013") }
-          it { should == date + day_interval }
+          it { is_expected.to eq(date + day_interval) }
         end
 
         context "followed by another non-business day" do
           let(:date) { date_class.parse("Saturday 5th Jan, 2013") }
-          it { should == date + 2 * day_interval }
+          it { is_expected.to eq(date + 2 * day_interval) }
         end
       end
     end
@@ -186,23 +186,23 @@ describe Business::Calendar do
       context "given a business day" do
         context "and a period that includes only business days" do
           let(:date) { date_class.parse("Wednesday 2nd Jan, 2013") }
-          it { should == date + delta * day_interval }
+          it { is_expected.to eq(date + delta * day_interval) }
         end
 
         context "and a period that includes a weekend" do
           let(:date) { date_class.parse("Friday 4th Jan, 2013") }
-          it { should == date + (delta + 2) * day_interval }
+          it { is_expected.to eq(date + (delta + 2) * day_interval) }
         end
 
         context "and a period that includes a holiday day" do
           let(:date) { date_class.parse("Monday 31st Dec, 2012") }
-          it { should == date + (delta + 1) * day_interval }
+          it { is_expected.to eq(date + (delta + 1) * day_interval) }
         end
       end
 
       context "given a non-business day" do
         let(:date) { date_class.parse("Tuesday 1st Jan, 2013") }
-        it { should == date + (delta + 1) * day_interval }
+        it { is_expected.to eq(date + (delta + 1) * day_interval) }
       end
     end
 
@@ -216,23 +216,23 @@ describe Business::Calendar do
       context "given a business day" do
         context "and a period that includes only business days" do
           let(:date) { date_class.parse("Wednesday 2nd Jan, 2013") }
-          it { should == date - delta * day_interval }
+          it { is_expected.to eq(date - delta * day_interval) }
         end
 
         context "and a period that includes a weekend" do
           let(:date) { date_class.parse("Monday 31st Dec, 2012") }
-          it { should == date - (delta + 2) * day_interval }
+          it { is_expected.to eq(date - (delta + 2) * day_interval) }
         end
 
         context "and a period that includes a holiday day" do
           let(:date) { date_class.parse("Friday 4th Jan, 2013") }
-          it { should == date - (delta + 1) * day_interval }
+          it { is_expected.to eq(date - (delta + 1) * day_interval) }
         end
       end
 
       context "given a non-business day" do
         let(:date) { date_class.parse("Thursday 3rd Jan, 2013") }
-        it { should == date - (delta + 1) * day_interval }
+        it { is_expected.to eq(date - (delta + 1) * day_interval) }
       end
     end
 
@@ -250,35 +250,35 @@ describe Business::Calendar do
         context "ending on a business day" do
           context "including only business days" do
             let(:date_2) { date_class.parse("Thu 5/6/2014") }
-            it { should == 3 }
+            it { is_expected.to eq(3) }
           end
 
           context "including only business days & weekend days" do
             let(:date_2) { date_class.parse("Mon 9/6/2014") }
-            it { should == 5 }
+            it { is_expected.to eq(5) }
           end
 
           context "including only business days & holidays" do
             let(:date_1) { date_class.parse("Mon 9/6/2014") }
             let(:date_2) { date_class.parse("Fri 13/6/2014") }
-            it { should == 3 }
+            it { is_expected.to eq(3) }
           end
 
           context "including business, weekend days, and holidays" do
             let(:date_2) { date_class.parse("Fri 13/6/2014") }
-            it { should == 8 }
+            it { is_expected.to eq(8) }
           end
         end
 
         context "ending on a weekend day" do
           context "including only business days & weekend days" do
             let(:date_2) { date_class.parse("Sun 8/6/2014") }
-            it { should == 5 }
+            it { is_expected.to eq(5) }
           end
 
           context "including business, weekend days, and holidays" do
             let(:date_2) { date_class.parse("Sat 14/6/2014") }
-            it { should == 9 }
+            it { is_expected.to eq(9) }
           end
         end
 
@@ -286,12 +286,12 @@ describe Business::Calendar do
           context "including only business days & holidays" do
             let(:date_1) { date_class.parse("Mon 9/6/2014") }
             let(:date_2) { date_class.parse("Thu 12/6/2014") }
-            it { should == 3 }
+            it { is_expected.to eq(3) }
           end
 
           context "including business, weekend days, and holidays" do
             let(:date_2) { date_class.parse("Thu 12/6/2014") }
-            it { should == 8 }
+            it { is_expected.to eq(8) }
           end
         end
       end
@@ -303,31 +303,31 @@ describe Business::Calendar do
 
           context "including only business days & weekend days" do
             let(:date_2) { date_class.parse("Mon 9/6/2014") }
-            it { should == 0 }
+            it { is_expected.to eq(0) }
           end
 
           context "including business, weekend days, and holidays" do
             let(:date_2) { date_class.parse("Fri 13/6/2014") }
-            it { should == 3 }
+            it { is_expected.to eq(3) }
           end
         end
 
         context "ending on a weekend day" do
           context "including only business days & weekend days" do
             let(:date_2) { date_class.parse("Sun 8/6/2014") }
-            it { should == 0 }
+            it { is_expected.to eq(0) }
           end
 
           context "including business, weekend days, and holidays" do
             let(:date_2) { date_class.parse("Sat 14/6/2014") }
-            it { should == 4 }
+            it { is_expected.to eq(4) }
           end
         end
 
         context "ending on a holiday" do
           context "including business, weekend days, and holidays" do
             let(:date_2) { date_class.parse("Thu 12/6/2014") }
-            it { should == 3 }
+            it { is_expected.to eq(3) }
           end
         end
       end
@@ -339,19 +339,19 @@ describe Business::Calendar do
 
           context "including only business days & holidays" do
             let(:date_2) { date_class.parse("Fri 13/6/2014") }
-            it { should == 0 }
+            it { is_expected.to eq(0) }
           end
 
           context "including business, weekend days, and holidays" do
             let(:date_2) { date_class.parse("Thu 19/6/2014") }
-            it { should == 3 }
+            it { is_expected.to eq(3) }
           end
         end
 
         context "ending on a weekend day" do
           context "including business, weekend days, and holidays" do
             let(:date_2) { date_class.parse("Sun 15/6/2014") }
-            it { should == 1 }
+            it { is_expected.to eq(1) }
           end
         end
 
@@ -359,12 +359,12 @@ describe Business::Calendar do
           context "including only business days & holidays" do
             let(:date_1) { date_class.parse("Wed 18/6/2014") }
             let(:date_2) { date_class.parse("Fri 20/6/2014") }
-            it { should == 1 }
+            it { is_expected.to eq(1) }
           end
 
           context "including business, weekend days, and holidays" do
             let(:date_2) { date_class.parse("Wed 18/6/2014") }
-            it { should == 3 }
+            it { is_expected.to eq(3) }
           end
         end
       end
@@ -373,12 +373,12 @@ describe Business::Calendar do
         context "for a range less than a week long" do
           let(:date_1) { date_class.parse("Thu 19/6/2014") }
           let(:date_2) { date_class.parse("Tue 24/6/2014") }
-          it { should == 2 }
+          it { is_expected.to eq(2) }
         end
         context "for a range more than a week long" do
           let(:date_1) { date_class.parse("Mon 16/6/2014") }
           let(:date_2) { date_class.parse("Tue 24/6/2014") }
-          it { should == 4 }
+          it { is_expected.to eq(4) }
         end
       end
     end
