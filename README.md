@@ -7,6 +7,12 @@ Date calculations based on business calendars.
 
 ## Documentation
 
+To get business, simply:
+
+```bash
+$ gem install business
+```
+
 ### Getting started
 
 Get stareted with business by creating an instance of the calendar class,
