@@ -1,6 +1,11 @@
 require "business/calendar"
 require "time"
 
+RSpec.configure do |config|
+  config.mock_with(:rspec) { |mocks| mocks.verify_partial_doubles = true }
+  config.raise_errors_for_deprecations!
+end
+
 describe Business::Calendar do
   describe ".load" do
     context "when given a valid calendar" do
