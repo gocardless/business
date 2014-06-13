@@ -42,8 +42,7 @@ module Business
     # day, that day will be returned. If the day given is a holiday or
     # non-working day, the next non-holiday working day will be returned.
     def roll_forward(date)
-      interval = date.is_a?(Date) ? 1 : 3600 * 24
-      date += interval until business_day?(date)
+      date += day_interval_for(date) until business_day?(date)
       date
     end
 
