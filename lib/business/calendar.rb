@@ -29,7 +29,7 @@ module Business
       set_holidays(config[:holidays])
     end
 
-    # Return true if the date given is a business day (typically that meanss a
+    # Return true if the date given is a business day (typically that means a
     # non-weekend day) and not a holiday.
     def business_day?(date)
       date = date.to_date
