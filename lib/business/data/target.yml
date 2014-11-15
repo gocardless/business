@@ -1,0 +1,26 @@
+working_days:
+  - monday
+  - tuesday
+  - wednesday
+  - thursday
+  - friday
+
+holidays:
+  - January 1st, 2013
+  - March 29th, 2013
+  - April 1st, 2013
+  - May 1st, 2013
+  - December 25th, 2013
+  - December 26th, 2013
+  - January 1st, 2014
+  - April 18th, 2014
+  - April 21st, 2014
+  - May 1st, 2014
+  - December 25th, 2014
+  - December 26th, 2014
+  - January 1st, 2015
+  - April 3rd, 2015
+  - April 6th, 2015
+  - May 1st, 2015
+  - December 25th, 2015
+  - December 26th, 2015
