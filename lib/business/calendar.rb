@@ -63,6 +63,15 @@ module Business
       date
     end
 
+    # Roll backward to the previous business day regardless of whether the given
+    # date is a business day or not.
+    def previous_business_day(date)
+      begin
+        date -= day_interval_for(date)
+      end until business_day?(date)
+      date
+    end
+
     # Add a number of business days to a date. If a non-business day is given,
     # counting will start from the next business day. So,
     #   monday + 1 = tuesday

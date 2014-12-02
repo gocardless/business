@@ -181,6 +181,30 @@ describe Business::Calendar do
       end
     end
 
+    describe "#previous_business_day" do
+      let(:calendar) do
+        Business::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
+      end
+      subject { calendar.previous_business_day(date) }
+
+      context "given a business day" do
+        let(:date) { date_class.parse("Thursday 3nd Jan, 2013") }
+        it { is_expected.to eq(date - day_interval) }
+      end
+
+      context "given a non-business day" do
+        context "with a business day before it" do
+          let(:date) { date_class.parse("Tuesday 1st Jan, 2013") }
+          it { is_expected.to eq(date - day_interval) }
+        end
+
+        context "preceeded by another non-business day" do
+          let(:date) { date_class.parse("Sunday 6th Jan, 2013") }
+          it { is_expected.to eq(date - 2 * day_interval) }
+        end
+      end
+    end
+
     describe "#add_business_days" do
       let(:calendar) do
         Business::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])
