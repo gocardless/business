@@ -2,10 +2,23 @@ require 'yaml'
 
 module Business
   class Calendar
+    class << self
+      attr_accessor :additional_load_paths
+    end
+
+    def self.calendar_directories
+      directories = @additional_load_paths || []
+      directories + [File.join(File.dirname(__FILE__), 'data')]
+    end
+    private_class_method :calendar_directories
+
     def self.load(calendar)
-      path = File.join(File.dirname(__FILE__), 'data', "#{calendar}.yml")
-      raise "No such calendar '#{calendar}'" unless File.exists?(path)
-      yaml = YAML.load_file(path)
+      directory = calendar_directories.find do |dir|
+        File.exists?(File.join(dir, "#{calendar}.yml"))
+      end
+      raise "No such calendar '#{calendar}'" unless directory
+
+      yaml = YAML.load_file(File.join(directory, "#{calendar}.yml"))
       self.new(holidays: yaml['holidays'], working_days: yaml['working_days'])
     end
 

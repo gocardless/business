@@ -49,6 +49,17 @@ calendar.business_day?(Date.parse("Sunday, 8 June 2014"))
 # => false
 ```
 
+### Custom calendars
+
+To use a calendar you've written yourself, you need to add the directory it's
+stored in as an additional calendar load path:
+
+```ruby
+Business::Calendar.additional_load_paths = ['path/to/your/calendar/directory']
+```
+
+You can then load the calendar as normal.
+
 ### Business day arithmetic
 
 The `add_business_days` and `subtract_business_days` are used to perform
@@ -85,7 +96,6 @@ date = Date.parse("Saturday, 14 June 2014")
 calendar.business_days_between(date, date + 7)
 # => 5
 ```
-
 
 ## But other libraries already do this
 

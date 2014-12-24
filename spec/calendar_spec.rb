@@ -21,6 +21,34 @@ describe Business::Calendar do
       it { is_expected.to be_a Business::Calendar }
     end
 
+    context "when given a calendar from a custom directory" do
+      before do
+        Business::Calendar.additional_load_paths = [
+          File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
+        ]
+      end
+      after { Business::Calendar.additional_load_paths = nil }
+      subject { Business::Calendar.load("ecb") }
+
+      it "loads the yaml file" do
+        expect(YAML).to receive(:load_file) { |path|
+          expect(path).to match(/ecb\.yml$/)
+        }.and_return({})
+        subject
+      end
+
+      it { is_expected.to be_a Business::Calendar }
+
+      context "that also exists as a default calendar" do
+        subject { Business::Calendar.load("bacs") }
+
+        it "uses the custom calendar" do
+          expect(subject.business_day?(Date.parse("25th December 2014"))).
+            to eq(true)
+        end
+      end
+    end
+
     context "when given an invalid calendar" do
       subject { Business::Calendar.load("invalid-calendar") }
       specify { expect{ subject }.to raise_error }
