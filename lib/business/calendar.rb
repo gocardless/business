@@ -11,12 +11,12 @@ module Business
 
     @lock = Mutex.new
     def self.load_cached(calendar)
-       @lock.synchronize do
-          @cache ||= { }
-          unless @cache.include?(calendar)
-            @cache[calendar] = self.load(calendar)
-          end
-          @cache[calendar]
+      @lock.synchronize do
+        @cache ||= { }
+        unless @cache.include?(calendar)
+          @cache[calendar] = self.load(calendar)
+        end
+        @cache[calendar]
       end
     end
 
