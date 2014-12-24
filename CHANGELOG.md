@@ -1,3 +1,9 @@
+## 1.4.0 - December 24, 2014
+
+- Add support for custom calendar load paths
+- Remove the 'sepa' calendar
+
+
 ## 1.3.0 - December 2, 2014
 
 - Add `Calendar#previous_business_day`
