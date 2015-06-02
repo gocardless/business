@@ -1,3 +1,7 @@
+## 1.5.0 - June 2, 2015
+
+- Add 2016 holiday definitions
+
 ## 1.4.0 - December 24, 2014
 
 - Add support for custom calendar load paths
