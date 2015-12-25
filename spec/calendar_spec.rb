@@ -51,7 +51,7 @@ describe Business::Calendar do
 
     context "when given an invalid calendar" do
       subject { Business::Calendar.load("invalid-calendar") }
-      specify { expect{ subject }.to raise_error }
+      specify { expect { subject }.to raise_error(/No such calendar/) }
     end
   end
 
@@ -78,7 +78,7 @@ describe Business::Calendar do
 
     context "when given an invalid business day" do
       let(:working_days) { %w( Notaday ) }
-      specify { expect{ subject }.to raise_exception }
+      specify { expect { subject }.to raise_error(/Invalid day/) }
     end
 
     context "when given nil" do
