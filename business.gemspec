@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "business"
   spec.version       = Business::VERSION
   spec.authors       = ["Harry Marr"]
-  spec.email         = ["engineering@gocardless.com"]
+  spec.email         = ["developers@gocardless.com"]
   spec.summary       = %q{Date calculations based on business calendars}
   spec.description   = %q{Date calculations based on business calendars}
   spec.homepage      = "https://github.com/gocardless/business"
@@ -19,5 +19,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "rspec", "~> 3.1"
 end
