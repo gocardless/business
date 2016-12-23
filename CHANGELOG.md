@@ -1,3 +1,8 @@
+## 1.6.0 - December 23, 2016
+
+- Add 2017 BACS holiday definitions
+- Add 2017 and 2018 TARGET holiday definitions
+
 ## 1.5.0 - June 2, 2015
 
 - Add 2016 holiday definitions
