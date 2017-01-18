@@ -1,3 +1,7 @@
+## 1.7.0 - January 18, 2017
+
+- Add 2018-2027 BACS holiday defintions
+
 ## 1.6.0 - December 23, 2016
 
 - Add 2017 BACS holiday definitions
