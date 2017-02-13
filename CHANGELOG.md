@@ -1,3 +1,8 @@
+## 1.8.0 - February 13, 2017
+
+- Add 2018-2027 TARGET holiday defintions
+- Add 2018-2027 Bankgirot holiday defintions
+
 ## 1.7.0 - January 18, 2017
 
 - Add 2018-2027 BACS holiday defintions
@@ -35,4 +40,3 @@
 ## 1.0.0 - June 11, 2014
 
 - Initial public release
-
