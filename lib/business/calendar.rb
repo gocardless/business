@@ -36,8 +36,8 @@ module Business
     attr_reader :working_days, :holidays
 
     def initialize(config)
-      set_working_days(config[:working_days])
-      set_holidays(config[:holidays])
+      self.working_days = config[:working_days]
+      self.holidays = config[:holidays]
     end
 
     # Return true if the date given is a business day (typically that means a
@@ -152,7 +152,7 @@ module Business
     end
 
     # Internal method for assigning working days from a calendar config.
-    def set_working_days(working_days)
+    def working_days=(working_days)
       @working_days = (working_days || default_working_days).map do |day|
         day.downcase.strip[0..2].tap do |normalised_day|
           raise "Invalid day #{day}" unless DAY_NAMES.include?(normalised_day)
@@ -161,7 +161,7 @@ module Business
     end
 
     # Internal method for assigning holidays from a calendar config.
-    def set_holidays(holidays)
+    def holidays=(holidays)
       @holidays = (holidays || []).map { |holiday| Date.parse(holiday) }
     end
 

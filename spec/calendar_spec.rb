@@ -55,10 +55,10 @@ describe Business::Calendar do
     end
   end
 
-  describe "#set_working_days" do
+  describe "#working_days=" do
     let(:calendar) { Business::Calendar.new({}) }
     let(:working_days) { [] }
-    subject { calendar.set_working_days(working_days) }
+    subject { calendar.working_days = working_days }
 
     context "when given valid working days" do
       let(:working_days) { %w[mon fri] }
@@ -89,10 +89,10 @@ describe Business::Calendar do
     end
   end
 
-  describe "#set_holidays" do
+  describe "#holidays=" do
     let(:calendar) { Business::Calendar.new({}) }
     let(:holidays) { [] }
-    before { calendar.set_holidays(holidays) }
+    before { calendar.holidays = holidays }
     subject { calendar.holidays }
 
     context "when given valid business days" do
