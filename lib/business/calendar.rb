@@ -68,18 +68,20 @@ module Business
     # Roll forward to the next business day regardless of whether the given
     # date is a business day or not.
     def next_business_day(date)
-      begin
+      loop do
         date += day_interval_for(date)
-      end until business_day?(date)
+        break if business_day?(date)
+      end
       date
     end
 
     # Roll backward to the previous business day regardless of whether the given
     # date is a business day or not.
     def previous_business_day(date)
-      begin
+      loop do
         date -= day_interval_for(date)
-      end until business_day?(date)
+        break if business_day?(date)
+      end
       date
     end
 
@@ -91,9 +93,7 @@ module Business
     def add_business_days(date, delta)
       date = roll_forward(date)
       delta.times do
-        begin
-          date += day_interval_for(date)
-        end until business_day?(date)
+        date = next_business_day(date)
       end
       date
     end
@@ -106,9 +106,7 @@ module Business
     def subtract_business_days(date, delta)
       date = roll_backward(date)
       delta.times do
-        begin
-          date -= day_interval_for(date)
-        end until business_day?(date)
+        date = previous_business_day(date)
       end
       date
     end
