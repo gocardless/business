@@ -1,4 +1,4 @@
-require 'yaml'
+require "yaml"
 
 module Business
   class Calendar
@@ -8,32 +8,30 @@ module Business
 
     def self.calendar_directories
       directories = @additional_load_paths || []
-      directories + [File.join(File.dirname(__FILE__), 'data')]
+      directories + [File.join(File.dirname(__FILE__), "data")]
     end
     private_class_method :calendar_directories
 
     def self.load(calendar)
       directory = calendar_directories.find do |dir|
-        File.exists?(File.join(dir, "#{calendar}.yml"))
+        File.exist?(File.join(dir, "#{calendar}.yml"))
       end
       raise "No such calendar '#{calendar}'" unless directory
 
       yaml = YAML.load_file(File.join(directory, "#{calendar}.yml"))
-      self.new(holidays: yaml['holidays'], working_days: yaml['working_days'])
+      new(holidays: yaml["holidays"], working_days: yaml["working_days"])
     end
 
     @lock = Mutex.new
     def self.load_cached(calendar)
       @lock.synchronize do
-        @cache ||= { }
-        unless @cache.include?(calendar)
-          @cache[calendar] = self.load(calendar)
-        end
+        @cache ||= {}
+        @cache[calendar] = load(calendar) unless @cache.include?(calendar)
         @cache[calendar]
       end
     end
 
-    DAY_NAMES = %( mon tue wed thu fri sat sun )
+    DAY_NAMES = %( mon tue wed thu fri sat sun ).freeze
 
     attr_reader :working_days, :holidays
 
@@ -46,7 +44,7 @@ module Business
     # non-weekend day) and not a holiday.
     def business_day?(date)
       date = date.to_date
-      return false unless working_days.include?(date.strftime('%a').downcase)
+      return false unless working_days.include?(date.strftime("%a").downcase)
       return false if holidays.include?(date)
       true
     end
@@ -119,7 +117,8 @@ module Business
     # This method counts from start of date1 to start of date2. So,
     # business_days_between(mon, weds) = 2 (assuming no holidays)
     def business_days_between(date1, date2)
-      date1, date2 = date1.to_date, date2.to_date
+      date1 = date1.to_date
+      date2 = date2.to_date
 
       # To optimise this method we split the range into full weeks and a
       # remaining period.
@@ -141,11 +140,11 @@ module Business
       num_biz_days -= holidays.count do |holiday|
         in_range = full_weeks_range.cover?(holiday)
         # Only pick a holiday if its on a working day (e.g., not a weekend)
-        on_biz_day = working_days.include?(holiday.strftime('%a').downcase)
+        on_biz_day = working_days.include?(holiday.strftime("%a").downcase)
         in_range && on_biz_day
       end
 
-      remaining_range = (date2-remaining_days...date2)
+      remaining_range = (date2 - remaining_days...date2)
       # Loop through each day in remaining_range and count if a business day
       num_biz_days + remaining_range.count { |a| business_day?(a) }
     end
@@ -170,8 +169,7 @@ module Business
 
     # If no working days are provided in the calendar config, these are used.
     def default_working_days
-      %w( mon tue wed thu fri )
+      %w[mon tue wed thu fri]
     end
   end
 end
-

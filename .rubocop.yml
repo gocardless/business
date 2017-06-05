@@ -1,0 +1,122 @@
+AllCops:
+  TargetRubyVersion: 2.1
+  DisplayCopNames: true
+
+Lint/UnneededDisable:
+  Severity: error
+
+Metrics/AbcSize:
+  Max: 59
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/PerceivedComplexity:
+  Max: 9
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 90
+  Exclude:
+    - Gemfile
+
+Metrics/BlockLength:
+  Exclude:
+    - business.gemspec
+    - spec/*
+    - spec/**/*
+
+# Avoid methods longer than 30 lines of code
+Metrics/MethodLength:
+  CountComments: false  # count full line comments?
+  Max: 87
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
+# Allow non-ASCII characters (e.g. £) in comments
+Style/AsciiComments:
+  Enabled: false
+
+Style/Alias:
+  Enabled: true
+  EnforcedStyle: prefer_alias_method
+
+# Use trailing rather than leading dots on multi-line call chains
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+# Magic encoding comment only relevant on ruby-1.9 or non-utf8
+Style/Encoding:
+  Enabled: never
+
+Style/Documentation:
+  Enabled: false
+
+Style/FormatString:
+  EnforcedStyle: sprintf
+
+Style/FrozenStringLiteralComment:
+  Enabled: always
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+# As of 0.43.0 this cop complains in situations where a guard clause would be
+# unhelpful or erroneous.
+# The auto-correct is also buggy.
+Style/GuardClause:
+  Enabled: false
+
+Style/IndentArray:
+  EnforcedStyle: consistent
+
+Style/IndentHash:
+  EnforcedStyle: consistent
+
+Style/Lambda:
+  EnforcedStyle: literal
+
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Style/NumericPredicate:
+  Exclude:
+    - 'spec/**/*'
+
+Style/NumericLiterals:
+  MinDigits: 11
+
+# As of 0.43.0 this cop has many false positives
+# https://github.com/bbatsov/rubocop/pull/3517 may fix a lot of these
+Style/SafeNavigation:
+  Enabled: false
+
+Style/SignalException:
+  EnforcedStyle: 'only_raise'
+
+# Wants you to use the same argument names for every reduce. This seems kinda
+# naff compared to naming them semantically
+Style/SingleLineBlockParams:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: 'double_quotes'
+
+Style/VariableNumber:
+  Enabled: false
+
+Style/FileName:
+  Exclude:
+    - 'Gemfile'

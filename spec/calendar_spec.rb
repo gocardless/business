@@ -24,7 +24,7 @@ describe Business::Calendar do
     context "when given a calendar from a custom directory" do
       before do
         Business::Calendar.additional_load_paths = [
-          File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
+          File.join(File.dirname(__FILE__), "fixtures", "calendars"),
         ]
       end
       after { Business::Calendar.additional_load_paths = nil }
@@ -61,7 +61,7 @@ describe Business::Calendar do
     subject { calendar.set_working_days(working_days) }
 
     context "when given valid working days" do
-      let(:working_days) { %w( mon fri ) }
+      let(:working_days) { %w[mon fri] }
       before { subject }
 
       it "assigns them" do
@@ -69,15 +69,15 @@ describe Business::Calendar do
       end
 
       context "that are unnormalised" do
-        let(:working_days) { %w( Monday Friday ) }
+        let(:working_days) { %w[Monday Friday] }
         it "normalises them" do
-          expect(calendar.working_days).to eq(%w( mon fri ))
+          expect(calendar.working_days).to eq(%w[mon fri])
         end
       end
     end
 
     context "when given an invalid business day" do
-      let(:working_days) { %w( Notaday ) }
+      let(:working_days) { %w[Notaday] }
       specify { expect { subject }.to raise_error(/Invalid day/) }
     end
 
@@ -300,7 +300,6 @@ describe Business::Calendar do
       let(:calendar) { Business::Calendar.new(holidays: holidays) }
       subject { calendar.business_days_between(date_1, date_2) }
 
-
       context "starting on a business day" do
         let(:date_1) { date_class.parse("Mon 2/6/2014") }
 
@@ -357,7 +356,6 @@ describe Business::Calendar do
         let(:date_1) { date_class.parse("Sat 7/6/2014") }
 
         context "ending on a business day" do
-
           context "including only business days & weekend days" do
             let(:date_2) { date_class.parse("Mon 9/6/2014") }
             it { is_expected.to eq(0) }
@@ -393,7 +391,6 @@ describe Business::Calendar do
         let(:date_1) { date_class.parse("Thu 12/6/2014") }
 
         context "ending on a business day" do
-
           context "including only business days & holidays" do
             let(:date_2) { date_class.parse("Fri 13/6/2014") }
             it { is_expected.to eq(0) }
@@ -462,4 +459,3 @@ describe Business::Calendar do
     it_behaves_like "common"
   end
 end
-
