@@ -1,3 +1,7 @@
+## 1.9.0 - August 23, 2017
+
+- Add 2017 Betalingsservice holiday definitions
+
 ## 1.8.0 - February 13, 2017
 
 - Add 2018-2027 TARGET holiday defintions
