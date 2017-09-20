@@ -1,3 +1,7 @@
+## 1.10.0 - September 20, 2017
+
+- Add 2018-2019 Betalingsservice holiday definitions
+
 ## 1.9.0 - August 23, 2017
 
 - Add 2017 Betalingsservice holiday definitions
