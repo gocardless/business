@@ -8,6 +8,8 @@ end
 
 describe Business::Calendar do
   describe ".load" do
+    let(:data_path) { File.join(File.dirname(__FILE__), '..', 'lib', 'business', 'data') }
+
     context "when given a valid calendar" do
       subject { Business::Calendar.load("weekdays") }
 
@@ -21,12 +23,14 @@ describe Business::Calendar do
       it { is_expected.to be_a Business::Calendar }
     end
 
+    load_additional_paths = proc do
+      Business::Calendar.additional_load_paths = [
+        File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
+      ]
+    end
+
     context "when given a calendar from a custom directory" do
-      before do
-        Business::Calendar.additional_load_paths = [
-          File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
-        ]
-      end
+      before &load_additional_paths
       after { Business::Calendar.additional_load_paths = nil }
       subject { Business::Calendar.load("ecb") }
 
@@ -49,9 +53,26 @@ describe Business::Calendar do
       end
     end
 
-    context "when given an invalid calendar" do
+    context "when given a calendar that does not exist" do
       subject { Business::Calendar.load("invalid-calendar") }
       specify { expect { subject }.to raise_error(/No such calendar/) }
+    end
+
+    context "when given a calendar that has invalid keys" do
+      before &load_additional_paths
+      subject { Business::Calendar.load("invalid-keys") }
+      specify { expect { subject }.to raise_error("Only valid keys are: holidays, working_days") }
+    end
+
+    context "when given real business data" do
+      it "validates they are all loadable by the calendar" do
+        Dir.glob("#{data_path}/*").each do |filename|
+          calendar_name = File.basename(filename, ".yml")
+          calendar = Business::Calendar.load(calendar_name)
+
+          expect(calendar.working_days.length).to be >= 1
+        end
+      end
     end
   end
 
