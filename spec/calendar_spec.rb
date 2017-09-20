@@ -9,12 +9,9 @@ end
 describe Business::Calendar do
   describe ".load" do
     before do
-      Business::Calendar.additional_load_paths = [
-        File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
-      ]
+      fixture_path = File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
+      Business::Calendar.additional_load_paths = [fixture_path]
     end
-
-    let(:data_path) { File.join(File.dirname(__FILE__), '..', 'lib', 'business', 'data') }
 
     context "when given a valid calendar" do
       subject { Business::Calendar.load("weekdays") }
@@ -63,6 +60,7 @@ describe Business::Calendar do
     end
 
     context "when given real business data" do
+      let(:data_path) { File.join(File.dirname(__FILE__), '..', 'lib', 'business', 'data') }
       it "validates they are all loadable by the calendar" do
         Dir.glob("#{data_path}/*").each do |filename|
           calendar_name = File.basename(filename, ".yml")
