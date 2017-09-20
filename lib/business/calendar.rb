@@ -19,6 +19,12 @@ module Business
       raise "No such calendar '#{calendar}'" unless directory
 
       yaml = YAML.load_file(File.join(directory, "#{calendar}.yml"))
+      valid_keys = ['holidays', 'working_days']
+
+      unless (yaml.keys - valid_keys).empty?
+        raise "Only valid keys are: #{valid_keys.join(', ')}"
+      end
+      
       self.new(holidays: yaml['holidays'], working_days: yaml['working_days'])
     end
 
