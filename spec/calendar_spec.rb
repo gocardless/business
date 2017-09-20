@@ -8,6 +8,12 @@ end
 
 describe Business::Calendar do
   describe ".load" do
+    before do
+      Business::Calendar.additional_load_paths = [
+        File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
+      ]
+    end
+
     let(:data_path) { File.join(File.dirname(__FILE__), '..', 'lib', 'business', 'data') }
 
     context "when given a valid calendar" do
@@ -23,14 +29,7 @@ describe Business::Calendar do
       it { is_expected.to be_a Business::Calendar }
     end
 
-    load_additional_paths = proc do
-      Business::Calendar.additional_load_paths = [
-        File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
-      ]
-    end
-
     context "when given a calendar from a custom directory" do
-      before &load_additional_paths
       after { Business::Calendar.additional_load_paths = nil }
       subject { Business::Calendar.load("ecb") }
 
@@ -59,7 +58,6 @@ describe Business::Calendar do
     end
 
     context "when given a calendar that has invalid keys" do
-      before &load_additional_paths
       subject { Business::Calendar.load("invalid-keys") }
       specify { expect { subject }.to raise_error("Only valid keys are: holidays, working_days") }
     end
