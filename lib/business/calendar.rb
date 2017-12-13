@@ -24,8 +24,8 @@ module Business
       unless (yaml.keys - valid_keys).empty?
         raise "Only valid keys are: #{valid_keys.join(', ')}"
       end
-      
-      self.new(holidays: yaml['holidays'], working_days: yaml['working_days'])
+
+      self.new(valid_keys.map{|k| [k.to_sym, yaml[k]]}.to_h)
     end
 
     @lock = Mutex.new
