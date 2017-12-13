@@ -1,3 +1,9 @@
+## 1.11.0 - December 13, 2017
+
+- Add support of working_dates (an option to mark some weekend as a "working day")
+- Handle properly calendar initialization by Date objects (not strings),
+  coming from both YAML config and initialize().
+
 ## 1.10.0 - September 20, 2017
 
 - Add 2018-2019 Betalingsservice holiday definitions
