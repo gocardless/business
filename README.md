@@ -63,7 +63,7 @@ You can then load the calendar as normal.
 ### Business day arithmetic
 
 The `add_business_days` and `subtract_business_days` are used to perform
-business day arithemtic on dates.
+business day arithmetic on dates.
 
 ```ruby
 date = Date.parse("Thursday, 12 June 2014")
@@ -96,6 +96,18 @@ date = Date.parse("Saturday, 14 June 2014")
 calendar.business_days_between(date, date + 7)
 # => 5
 ```
+
+### Included Calendars
+
+We include some calendar data with this Gem but give no guarantees of its
+accuracy.
+The calendars that we include are:
+
+* Bacs
+* Bankgirot
+* BECS
+* Betalingsservice
+* Target (SEPA)
 
 ## But other libraries already do this
 
