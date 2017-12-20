@@ -22,11 +22,14 @@ days, and which days are holidays.
 ```ruby
 calendar = Business::Calendar.new(
   working_days: %w( mon tue wed thu fri ),
-  holidays: ["01/01/2014", "03/01/2014"]
+  holidays: ["01/01/2014", "03/01/2014"],    # array items are either parseable date strings, or real Date objects
+  working_dates: ["08/01/2014"]
 )
 ```
 
-A few calendar configs are bundled with the gem (see lib/business/data for
+`working_dates` parameter makes the calendar to consider a weekend day as a working day.
+
+A few calendar configs are bundled with the gem (see `lib/business/data` for
 details). Load them by calling the `load` class method on `Calendar`. The
 `load_cached` variant of this method caches the calendars by name after loading
 them, to avoid reading and parsing the config file multiple times.
@@ -35,6 +38,39 @@ them, to avoid reading and parsing the config file multiple times.
 calendar = Business::Calendar.load("weekdays")
 calendar = Business::Calendar.load_cached("weekdays")
 ```
+
+Config files are YAML files that look such simple as:
+```yaml
+working_days:
+  - monday
+  - tuesday
+  - wednesday
+  - thursday
+  - friday
+
+holidays:
+  - January 1st, 2017
+  - March 8th, 2017
+  - May 1st, 2017
+
+working_dates:
+  - January 8st, 2017
+```
+
+If `working_days` is missing, then common default is used (mon-fri).
+If `holidays` is missing, "no holidays" assumed.
+If `working_dates` is missing, then no changes in `working_days` will happen.
+
+Elements of `holidays` and `working_dates` may be
+eiter strings that `Date.parse()` can understand,
+or YYYY-MM-DD (which is considered as a Date by Ruby YAML itself).
+
+```yaml
+working_dates:
+  - 2017-01-08  # Same as January 8th, 2017
+```
+
+You may find a few sample config files in `lib/business/data/` directory.
 
 ### Checking for business days
 
