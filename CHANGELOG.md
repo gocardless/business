@@ -1,3 +1,7 @@
+## 1.11.1 - December 20, 2017
+
+- Add 2017-2018 BECS holiday definitions
+
 ## 1.10.0 - September 20, 2017
 
 - Add 2018-2019 Betalingsservice holiday definitions
