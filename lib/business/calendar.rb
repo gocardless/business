@@ -170,6 +170,9 @@ module Business
           raise "Invalid day #{day}" unless DAY_NAMES.include?(normalised_day)
         end
       end
+      extra_working_dates_names = @extra_working_dates.map { |d| d.strftime("%a").downcase }
+      return if (extra_working_dates_names & @working_days).none?
+      raise ArgumentError, 'Extra working dates cannot be on working days'
     end
 
     def parse_dates(dates)

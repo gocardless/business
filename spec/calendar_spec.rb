@@ -162,6 +162,18 @@ describe Business::Calendar do
     end
   end
 
+  context "when working date on working day" do
+    subject do
+      Business::Calendar.new(working_days: ["mon"],
+                             extra_working_dates: ["Monday 26th Mar, 2018"])
+    end
+
+    it do
+      expect { subject }.to raise_error(ArgumentError)
+        .with_message('Extra working dates cannot be on working days')
+    end
+  end
+
   # A set of examples that are supposed to work when given Date and Time
   # objects. The implementation slightly differs, so i's worth running the
   # tests for both Date *and* Time.
