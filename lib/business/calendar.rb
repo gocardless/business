@@ -19,13 +19,14 @@ module Business
       raise "No such calendar '#{calendar}'" unless directory
 
       yaml = YAML.load_file(File.join(directory, "#{calendar}.yml"))
-      valid_keys = ['holidays', 'working_days']
+      valid_keys = %w(holidays working_days extra_working_dates)
 
       unless (yaml.keys - valid_keys).empty?
         raise "Only valid keys are: #{valid_keys.join(', ')}"
       end
-      
-      self.new(holidays: yaml['holidays'], working_days: yaml['working_days'])
+
+      self.new(holidays: yaml['holidays'], working_days: yaml['working_days'],
+               extra_working_dates: yaml['extra_working_dates'])
     end
 
     @lock = Mutex.new
@@ -41,9 +42,10 @@ module Business
 
     DAY_NAMES = %( mon tue wed thu fri sat sun )
 
-    attr_reader :working_days, :holidays
+    attr_reader :holidays, :working_days, :extra_working_dates
 
     def initialize(config)
+      set_extra_working_dates(config[:extra_working_dates])
       set_working_days(config[:working_days])
       set_holidays(config[:holidays])
     end
@@ -52,6 +54,7 @@ module Business
     # non-weekend day) and not a holiday.
     def business_day?(date)
       date = date.to_date
+      return true if extra_working_dates.include?(date)
       return false unless working_days.include?(date.strftime('%a').downcase)
       return false if holidays.include?(date)
       true
@@ -169,9 +172,17 @@ module Business
       end
     end
 
+    def parse_dates(dates)
+      (dates || []).map { |date| date.is_a?(Date) ? date : Date.parse(date) }
+    end
+
     # Internal method for assigning holidays from a calendar config.
     def set_holidays(holidays)
-      @holidays = (holidays || []).map { |holiday| Date.parse(holiday) }
+      @holidays = parse_dates(holidays)
+    end
+
+    def set_extra_working_dates(extra_working_dates)
+      @extra_working_dates = parse_dates(extra_working_dates)
     end
 
     # If no working days are provided in the calendar config, these are used.
@@ -180,4 +191,3 @@ module Business
     end
   end
 end
-

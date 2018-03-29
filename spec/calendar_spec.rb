@@ -56,7 +56,7 @@ describe Business::Calendar do
 
     context "when given a calendar that has invalid keys" do
       subject { Business::Calendar.load("invalid-keys") }
-      specify { expect { subject }.to raise_error("Only valid keys are: holidays, working_days") }
+      specify { expect { subject }.to raise_error("Only valid keys are: holidays, working_days, extra_working_dates") }
     end
 
     context "when given real business data" do
@@ -114,6 +114,28 @@ describe Business::Calendar do
 
     context "when given valid business days" do
       let(:holidays) { ["1st Jan, 2013"] }
+
+      it { is_expected.not_to be_empty }
+
+      it "converts them to Date objects" do
+        subject.each { |h| expect(h).to be_a Date }
+      end
+    end
+
+    context "when given nil" do
+      let(:holidays) { nil }
+      it { is_expected.to be_empty }
+    end
+  end
+
+  describe "#set_extra_working_dates" do
+    let(:calendar) { Business::Calendar.new({}) }
+    let(:extra_working_dates) { [] }
+    before { calendar.set_extra_working_dates(extra_working_dates) }
+    subject { calendar.extra_working_dates }
+
+    context "when given valid business days" do
+      let(:extra_working_dates) { ["1st Jan, 2013"] }
 
       it { is_expected.not_to be_empty }
 
@@ -479,4 +501,3 @@ describe Business::Calendar do
     it_behaves_like "common"
   end
 end
-
