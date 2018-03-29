@@ -72,6 +72,19 @@ describe Business::Calendar do
     end
   end
 
+  describe "bundled calendars" do
+    calendars = Dir.glob("../lib/business/data*.yml")
+                   .map { |f| File.basename(f, ".yml") }
+
+    calendars.each do |calendar|
+      describe calendar do
+        it "should load without issues" do
+          expect { Business::Calendar.load(calendar) }.not_to raise_error
+        end
+      end
+    end
+  end
+
   describe "#set_working_days" do
     let(:calendar) { Business::Calendar.new({}) }
     let(:working_days) { [] }
