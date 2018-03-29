@@ -179,6 +179,8 @@ module Business
     # Internal method for assigning holidays from a calendar config.
     def set_holidays(holidays)
       @holidays = parse_dates(holidays)
+      return if (@holidays & @extra_working_dates).none?
+      raise ArgumentError, 'Holidays cannot be extra working dates'
     end
 
     def set_extra_working_dates(extra_working_dates)

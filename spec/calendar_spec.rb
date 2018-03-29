@@ -150,6 +150,18 @@ describe Business::Calendar do
     end
   end
 
+  context "when holiday is also a working date" do
+    subject do
+      Business::Calendar.new(holidays: ["2018-01-06"],
+                             extra_working_dates: ["2018-01-06"])
+    end
+
+    it do
+      expect { subject }.to raise_error(ArgumentError)
+        .with_message('Holidays cannot be extra working dates')
+    end
+  end
+
   # A set of examples that are supposed to work when given Date and Time
   # objects. The implementation slightly differs, so i's worth running the
   # tests for both Date *and* Time.
