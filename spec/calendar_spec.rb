@@ -360,7 +360,7 @@ describe Business::Calendar do
          "Sun 22/6/2014", "Fri 27/6/2014", "Thu 3/7/2014"]
       end
       let(:extra_working_dates) do
-        ["Sun 1/6/2014", "Sat 28/6/2014"]
+        ["Sun 1/6/2014", "Sat 28/6/2014", "Sat 5/7/2014"]
       end
       let(:calendar) do
         Business::Calendar.new(holidays: holidays, extra_working_dates: extra_working_dates)
@@ -450,6 +450,26 @@ describe Business::Calendar do
             it { is_expected.to eq(11) }
           end
         end
+
+        context "ending on a working date" do
+          let(:date_1) { "Fri 4/7/2014" }
+
+          context "including only business days & working date" do
+            let(:date_2) { "Sat 5/7/2014" }
+            it { is_expected.to eq(1) }
+          end
+
+          context "including business, weekend days & working date" do
+            let(:date_2) { "Tue 8/7/2014" }
+            it { is_expected.to eq(3) }
+          end
+
+          context "including business, weekend days, holidays & working date" do
+            let(:date_1) { "Wed 25/6/2014" }
+            let(:date_2) { "Tue 8/7/2014" }
+            it { is_expected.to eq(8) }
+          end
+        end
       end
 
       context "starting on a weekend" do
@@ -516,6 +536,25 @@ describe Business::Calendar do
             it { is_expected.to eq(8) }
           end
         end
+
+        context "ending on a working date" do
+          let(:date_1) { "Sat 31/5/2014" }
+
+          context "including only weekend days & working date" do
+            let(:date_2) { "Sat 2/6/2014" }
+            it { is_expected.to eq(1) }
+          end
+
+          context "including business, weekend days & working date" do
+            let(:date_2) { "Tue 4/6/2014" }
+            it { is_expected.to eq(3) }
+          end
+
+          context "including business, weekend days, holidays & working date" do
+            let(:date_2) { "Tue 13/6/2014" }
+            it { is_expected.to eq(8) }
+          end
+        end
       end
 
       context "starting on a holiday" do
@@ -569,6 +608,25 @@ describe Business::Calendar do
             let(:date_1) { "27/5/2014" }
             let(:date_2) { "Thu 12/6/2014" }
             it { is_expected.to eq(11) }
+          end
+        end
+
+        context "ending on a working date" do
+          let(:date_1) { "Sat 27/6/2014" }
+
+          context "including only holiday & working date" do
+            let(:date_2) { "Sat 29/6/2014" }
+            it { is_expected.to eq(1) }
+          end
+
+          context "including holiday, weekend days & working date" do
+            let(:date_2) { "Tue 30/6/2014" }
+            it { is_expected.to eq(1) }
+          end
+
+          context "including business, weekend days, holidays & working date" do
+            let(:date_2) { "Tue 2/7/2014" }
+            it { is_expected.to eq(3) }
           end
         end
       end
