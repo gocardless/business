@@ -123,6 +123,7 @@ The calendars that we include are:
 * BECS
 * Betalingsservice
 * Target (SEPA)
+* Russian
 
 ## But other libraries already do this
 

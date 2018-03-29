@@ -1,3 +1,7 @@
+## 1.12.2 - ???
+
+- Add Russian holiday definitions
+
 ## 1.12.1 - ???
 
 - Add support for specifying extra_working_dates (special dates that are
