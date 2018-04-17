@@ -22,11 +22,13 @@ days, and which days are holidays.
 ```ruby
 calendar = Business::Calendar.new(
   working_days: %w( mon tue wed thu fri ),
-  holidays: ["01/01/2014", "03/01/2014"]
+  holidays: ["01/01/2014", "03/01/2014"]    # array items are either parseable date strings, or real Date objects
 )
 ```
 
-A few calendar configs are bundled with the gem (see lib/business/data for
+`extra_working_dates` key makes the calendar to consider a weekend day as a working day.
+
+A few calendar configs are bundled with the gem (see [lib/business/data]((lib/business/data)) for
 details). Load them by calling the `load` class method on `Calendar`. The
 `load_cached` variant of this method caches the calendars by name after loading
 them, to avoid reading and parsing the config file multiple times.
@@ -36,11 +38,24 @@ calendar = Business::Calendar.load("weekdays")
 calendar = Business::Calendar.load_cached("weekdays")
 ```
 
+If `working_days` is missing, then common default is used (mon-fri).
+If `holidays` is missing, "no holidays" assumed.
+If `extra_working_dates` is missing, then no changes in `working_days` will happen.
+
+Elements of `holidays` and `extra_working_dates` may be
+eiter strings that `Date.parse()` can understand,
+or YYYY-MM-DD (which is considered as a Date by Ruby YAML itself).
+
+```yaml
+holidays:
+  - 2017-01-08  # Same as January 8th, 2017
+```
+
 ### Checking for business days
 
 To check whether a given date is a business day (falls on one of the specified
-working days, and is not a holiday), use the `business_day?` method on
-`Calendar`.
+working days or working dates, and is not a holiday), use the `business_day?`
+method on `Calendar`.
 
 ```ruby
 calendar.business_day?(Date.parse("Monday, 9 June 2014"))

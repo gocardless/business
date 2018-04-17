@@ -1,6 +1,23 @@
+## 1.12.1 - ???
+
+- Add support for specifying extra_working_dates (special dates that are
+  "working days", even though they are not one of the specified working
+  days, e.g. weekend dates that are special working days)
+
+
+## 1.12.0 - April 3, 2018
+
+- Add Betalingservice & BECS calendars up until 2020
+
 ## 1.11.1 - December 20, 2017
 
 - Add 2017-2018 BECS holiday definitions
+
+## 1.11.0 - December 13, 2017
+
+- Handle properly calendar initialization by Date objects (not strings),
+  coming from both YAML config and initialize().
+
 
 ## 1.10.0 - September 20, 2017
 
