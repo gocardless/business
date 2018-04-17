@@ -1,9 +1,8 @@
-## 1.12.1 - ???
+## 1.13.0 - April 17, 2018
 
-- Add support for specifying extra_working_dates (special dates that are
-  "working days", even though they are not one of the specified working
-  days, e.g. weekend dates that are special working days)
-
+- Add support for specifying `extra_working_dates` (special dates that are "working days",
+  even though they are not one of the specified days, for example weekend dates
+  that are considered to be working days)
 
 ## 1.12.0 - April 3, 2018
 
