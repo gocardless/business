@@ -1,3 +1,7 @@
+## 1.13.1 - June 22, 2018
+
+- Fix June's 2018 bank holidays for Bankgirot
+
 ## 1.13.0 - April 17, 2018
 
 - Add support for specifying `extra_working_dates` (special dates that are "working days",
