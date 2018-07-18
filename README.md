@@ -120,7 +120,8 @@ The calendars that we include are:
 
 * Bacs
 * Bankgirot
-* BECS
+* BECS (Australia)
+* BECSNZ (New Zealand)
 * Betalingsservice
 * Target (SEPA)
 
