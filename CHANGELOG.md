@@ -1,3 +1,7 @@
+## 1.14.0 - July 18, 2018
+
+- Add holiday calendar for BECS New Zealand
+
 ## 1.13.1 - June 22, 2018
 
 - Fix June's 2018 bank holidays for Bankgirot
