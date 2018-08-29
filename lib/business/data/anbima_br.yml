@@ -1,0 +1,45 @@
+# Baseado em: http://www.anbima.com.br/feriados/feriados.asp
+working_days:
+  - monday
+  - tuesday
+  - wednesday
+  - thursday
+  - friday
+
+holidays:
+  - 2018/01/01	# Confraternização Universal
+  - 2018/02/12	# Carnaval
+  - 2018/02/13	# Carnaval
+  - 2018/03/30	# Paixão de Cristo
+  - 2018/04/21	# Tiradentes
+  - 2018/05/01	# Dia do Trabalho
+  - 2018/05/31	# Corpus Christi
+  - 2018/09/07	# Independência do Brasil
+  - 2018/10/12	# Nossa Sr.a Aparecida - Padroeira do Brasil
+  - 2018/11/02	# Finados
+  - 2018/11/15	# Proclamação da República
+  - 2018/12/25	# Natal
+  - 2019/01/01	# Confraternização Universal
+  - 2019/03/04	# Carnaval
+  - 2019/03/05	# Carnaval
+  - 2019/04/19	# Paixão de Cristo
+  - 2019/04/21	# Tiradentes
+  - 2019/05/01	# Dia do Trabalho
+  - 2019/06/20	# Corpus Christi
+  - 2019/09/07	# Independência do Brasil
+  - 2019/10/12	# Nossa Sr.a Aparecida - Padroeira do Brasil
+  - 2019/11/02	# Finados
+  - 2019/11/15	# Proclamação da República
+  - 2019/12/25	# Natal
+  - 2020/01/01	# Confraternização Universal
+  - 2020/02/24	# Carnaval
+  - 2020/02/25	# Carnaval
+  - 2020/04/10	# Paixão de Cristo
+  - 2020/04/21	# Tiradentes
+  - 2020/05/01	# Dia do Trabalho
+  - 2020/06/11	# Corpus Christi
+  - 2020/09/07	# Independência do Brasil
+  - 2020/10/12	# Nossa Sr.a Aparecida - Padroeira do Brasil
+  - 2020/11/02	# Finados
+  - 2020/11/15	# Proclamação da República
+  - 2020/12/25	# Natal
