@@ -1,0 +1,44 @@
+working_days:
+  - monday
+  - tuesday
+  - wednesday
+  - thursday
+  - friday
+
+holidays:
+  - January 1st, 2018
+  - January 2nd, 2018
+  - February 12th, 2018
+  - February 19th, 2018
+  - March 30th, 2018
+  - April 2nd, 2018
+  - May 21st, 2018
+  - June 21st, 2018
+  - June 25th, 2018
+  - July 2nd, 2018
+  - July 9th, 2018
+  - August 6th, 2018
+  - August 20th, 2018
+  - September 3rd, 2018
+  - October 8th, 2018
+  - November 12th, 2018
+  - December 25th, 2018
+  - December 26th, 2018
+  - January 1st, 2019
+  - January 2nd, 2019
+  - February 11th, 2019
+  - February 18th, 2019
+  - April 19th, 2019
+  - April 22nd, 2019
+  - May 20th, 2019
+  - June 21st, 2019
+  - June 24th, 2019
+  - July 1st, 2019
+  - July 9th, 2019
+  - August 5th, 2019
+  - August 19th, 2019
+  - September 2nd, 2019
+  - October 14th, 2019
+  - November 11th, 2019
+  - December 25th, 2019
+  - December 26th, 2019

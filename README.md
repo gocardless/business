@@ -122,6 +122,7 @@ The calendars that we include are:
 * Bankgirot
 * BECS (Australia)
 * BECSNZ (New Zealand)
+* PAD (Canada)
 * Betalingsservice
 * Target (SEPA)
 
