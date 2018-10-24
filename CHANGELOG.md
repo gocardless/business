@@ -1,3 +1,7 @@
+## 1.15.0 - October 24, 2018
+
+- Add holiday calendar for PAD Canada
+
 ## 1.14.0 - July 18, 2018
 
 - Add holiday calendar for BECS New Zealand
