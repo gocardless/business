@@ -1,3 +1,7 @@
+## 1.16.0 - January 17, 2019
+
+- Add holiday calendar for ACH U.S.
+
 ## 1.15.0 - October 24, 2018
 
 - Add holiday calendar for PAD Canada
