@@ -1,3 +1,7 @@
+## 1.16.1 - September 2, 2019
+
+- Fix holiday calendar for ACH U.S.
+
 ## 1.16.0 - January 17, 2019
 
 - Add holiday calendar for ACH U.S.
