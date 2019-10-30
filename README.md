@@ -125,7 +125,7 @@ The calendars that we include are:
 * PAD (Canada)
 * Betalingsservice
 * Target (SEPA)
-* TargetFrance (SEPA + France bank holidays)
+* TargetFrance (SEPA + French bank holidays)
 
 ## But other libraries already do this
 

@@ -1,3 +1,6 @@
+# Any changes made to this file should also be made to targetfrance.yml,
+# as that file also contains Target(SEPA) holidays.
+
 working_days:
   - monday
   - tuesday
