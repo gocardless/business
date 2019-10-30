@@ -1,3 +1,7 @@
+## 1.17.0 - September 2, 2019
+
+- Add holiday calendar for France (Target(SEPA) + French bank holidays)
+
 ## 1.16.1 - September 2, 2019
 
 - Fix holiday calendar for ACH U.S.

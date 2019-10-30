@@ -1,0 +1,130 @@
+# The dates for Ascension Day and Whit Monday change each year. At the time of writing this comment (29/10/2019),
+# the dates for these holidays have only been published up till the year 2021. 
+# In this file, dates from the year 2022 onwards only consist of fixed/known bank holidays. 
+
+working_days:
+  - monday
+  - tuesday
+  - wednesday
+  - thursday
+  - friday
+
+holidays:
+  - January 1st, 2018
+  - March 30th, 2018
+  - April 2nd, 2018
+  - May 1st, 2018
+  - May 8th, 2018
+  - May 10th, 2018
+  - May 21st, 2018
+  - July 14th, 2018
+  - August 15th, 2018
+  - November 1st, 2018
+  - November 11th, 2018
+  - December 25th, 2018
+  - December 26th, 2018
+  - January 1st, 2019
+  - April 19th, 2019
+  - April 22nd, 2019
+  - May 1st, 2019
+  - May 8th, 2019 
+  - May 30th, 2019 
+  - June 10th, 2019 
+  - July 14th, 2019 
+  - August 15th, 2019 
+  - November 1st, 2019 
+  - November 11th, 2019 
+  - December 25th, 2019
+  - December 26th, 2019
+  - January 1st, 2020
+  - April 10th, 2020
+  - April 13th, 2020
+  - May 1st, 2020
+  - May 8th, 2020 
+  - May 21st, 2020 
+  - June 1st, 2020 
+  - July 14th, 2020 
+  - August 15th, 2020 
+  - November 1st, 2020 
+  - November 11th, 2020 
+  - December 25th, 2020
+  - December 26th, 2020
+  - January 1st, 2021
+  - April 2nd, 2021
+  - April 5th, 2021
+  - May 1st, 2021
+  - May 8th, 2021 
+  - May 13th, 2021 
+  - May 24th, 2021 
+  - July 14th, 2021 
+  - August 15th, 2021 
+  - November 1st, 2021 
+  - November 11th, 2021 
+  - December 25th, 2021
+  - December 26th, 2021
+  - January 1st, 2022
+  - April 15th, 2022
+  - April 18th, 2022
+  - May 1st, 2022
+  - May 8th, 2022 
+  - July 14th, 2022 
+  - August 15th, 2022 
+  - November 1st, 2022 
+  - November 11th, 2022 
+  - December 25th, 2022
+  - December 26th, 2022
+  - January 1st, 2023
+  - April 7th, 2023
+  - April 10th, 2023
+  - May 1st, 2023
+  - May 8th, 2023 
+  - July 14th, 2023 
+  - August 15th, 2023 
+  - November 1st, 2023 
+  - November 11th, 2023 
+  - December 25th, 2023
+  - December 26th, 2023
+  - January 1st, 2024
+  - March 29th, 2024
+  - April 1st, 2024
+  - May 1st, 2024
+  - May 8th, 2024 
+  - July 14th, 2024 
+  - August 15th, 2024 
+  - November 1st, 2024 
+  - November 11th, 2024 
+  - December 25th, 2024
+  - December 26th, 2024
+  - January 1st, 2025
+  - April 18th, 2025
+  - April 21st, 2025
+  - May 1st, 2025
+  - May 8th, 2025 
+  - July 14th, 2025 
+  - August 15th, 2025 
+  - November 1st, 2025 
+  - November 11th, 2025 
+  - December 25th, 2025
+  - December 26th, 2025
+  - January 1st, 2026
+  - April 3rd, 2026
+  - April 6th, 2026
+  - May 1st, 2026
+  - May 8th, 2026 
+  - July 14th, 2026 
+  - August 15th, 2026 
+  - November 1st, 2026 
+  - November 11th, 2026 
+  - December 25th, 2026
+  - December 26th, 2026
+  - January 1st, 2027
+  - March 26th, 2027
+  - March 29th, 2027
+  - May 1st, 2027
+  - May 8th, 2027 
+  - July 14th, 2027 
+  - August 15th, 2027 
+  - November 1st, 2027 
+  - November 11th, 2027 
+  - December 25th, 2027
+  - December 26th, 2027
