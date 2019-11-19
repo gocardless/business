@@ -1,3 +1,8 @@
+## 1.17.1 - November 19, 2019
+
+- Change May Bank Holiday 2020 for UK (Bacs) - this was moved to the 8th.
+- Add 2020 holidays for PAD.
+
 ## 1.17.0 - September 2, 2019
 
 - Add holiday calendar for France (Target(SEPA) + French bank holidays)
