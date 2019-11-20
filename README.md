@@ -126,6 +126,7 @@ The calendars that we include are:
 * Betalingsservice
 * Target (SEPA)
 * TargetFrance (SEPA + French bank holidays)
+* US Banking (ACH)
 
 ## But other libraries already do this
 
