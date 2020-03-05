@@ -19,14 +19,14 @@ module Business
       raise "No such calendar '#{calendar}'" unless directory
 
       yaml = YAML.load_file(File.join(directory, "#{calendar}.yml"))
-      valid_keys = %w(holidays working_days extra_working_dates)
+      valid_keys = %w(holidays working_days extra_working_dates extra_holidays)
 
       unless (yaml.keys - valid_keys).empty?
         raise "Only valid keys are: #{valid_keys.join(', ')}"
       end
 
       self.new(holidays: yaml['holidays'], working_days: yaml['working_days'],
-               extra_working_dates: yaml['extra_working_dates'])
+               extra_working_dates: yaml['extra_working_dates'], extra_holidays: yaml['extra_holidays'])
     end
 
     @lock = Mutex.new
@@ -42,12 +42,12 @@ module Business
 
     DAY_NAMES = %( mon tue wed thu fri sat sun )
 
-    attr_reader :holidays, :working_days, :extra_working_dates
+    attr_reader :holidays, :working_days, :extra_working_dates, :extra_holidays
 
     def initialize(config)
       set_extra_working_dates(config[:extra_working_dates])
       set_working_days(config[:working_days])
-      set_holidays(config[:holidays])
+      set_holidays(config[:holidays], config[:extra_holidays])
     end
 
     # Return true if the date given is a business day (typically that means a
@@ -180,8 +180,8 @@ module Business
     end
 
     # Internal method for assigning holidays from a calendar config.
-    def set_holidays(holidays)
-      @holidays = parse_dates(holidays)
+    def set_holidays(holidays, extra_holidays)
+      @holidays = parse_dates(holidays) + parse_dates(extra_holidays)
       return if (@holidays & @extra_working_dates).none?
       raise ArgumentError, 'Holidays cannot be extra working dates'
     end
