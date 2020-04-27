@@ -1,0 +1,37 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/ruby:<< parameters.ruby-version >>
+    parameters:
+      ruby-version:
+        type: string
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - bundle-v1-<< parameters.ruby-version >>-{{ checksum "business.gemspec" }}
+            - bundle-v1-<< parameters.ruby-version >>-
+      - run:
+          name: Install dependencies
+          command: bundle install --clean --no-cache --path vendor/bundle --jobs=4 --retry=3
+      - save_cache:
+          key: bundle-v1-<< parameters.ruby-version >>-{{ checksum "business.gemspec" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Run tests
+          command: bundle exec rspec
+      # - run:
+      #     name: Run rubocop
+      #     command: bundle exec rubocop --parallel --extra-details --display-style-guide
+
+workflows:
+  default:
+    jobs:
+      - test:
+          name: Ruby << matrix.ruby-version >>
+          matrix:
+            parameters:
+              ruby-version: ["2.5.8", "2.6.6", "2.7.1"]
