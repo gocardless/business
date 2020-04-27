@@ -23,6 +23,9 @@ jobs:
       - run:
           name: Run tests
           command: bundle exec rspec
+      - run:
+          name: Run rubocop
+          command: bundle exec rubocop --parallel --extra-details --display-style-guide
 
 workflows:
   default:

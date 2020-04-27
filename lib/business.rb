@@ -1,1 +1,3 @@
-require 'business/calendar'
+# frozen_string_literal: true
+
+require "business/calendar"

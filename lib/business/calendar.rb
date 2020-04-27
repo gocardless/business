@@ -1,8 +1,12 @@
-require 'yaml'
-require 'date'
+# frozen_string_literal: true
+
+require "yaml"
+require "date"
 
 module Business
   class Calendar
+    VALID_KEYS = %w[holidays working_days extra_working_dates].freeze
+
     class << self
       attr_accessor :load_paths
     end
@@ -13,38 +17,37 @@ module Business
     private_class_method :calendar_directories
 
     def self.load(calendar_name)
-      data = calendar_directories.detect do |path|
+      data = find_calendar_data(calendar_name)
+      raise "No such calendar '#{calendar_name}'" unless data
+
+      unless (data.keys - VALID_KEYS).empty?
+        raise "Only valid keys are: #{VALID_KEYS.join(', ')}"
+      end
+
+      new(
+        holidays: data["holidays"],
+        working_days: data["working_days"],
+        extra_working_dates: data["extra_working_dates"],
+      )
+    end
+
+    def self.find_calendar_data(calendar_name)
+      calendar_directories.detect do |path|
         if path.is_a?(Hash)
           break path[calendar_name] if path[calendar_name]
         else
-          next unless File.exists?(File.join(path, "#{calendar_name}.yml"))
+          next unless File.exist?(File.join(path, "#{calendar_name}.yml"))
 
           break YAML.load_file(File.join(path, "#{calendar_name}.yml"))
         end
       end
-
-      raise "No such calendar '#{calendar_name}'" unless data
-
-      valid_keys = %w(holidays working_days extra_working_dates)
-
-      unless (data.keys - valid_keys).empty?
-        raise "Only valid keys are: #{valid_keys.join(', ')}"
-      end
-
-      self.new(
-        holidays: data['holidays'],
-        working_days: data['working_days'],
-        extra_working_dates: data['extra_working_dates'],
-      )
     end
 
     @lock = Mutex.new
     def self.load_cached(calendar)
       @lock.synchronize do
-        @cache ||= { }
-        unless @cache.include?(calendar)
-          @cache[calendar] = self.load(calendar)
-        end
+        @cache ||= {}
+        @cache[calendar] = self.load(calendar) unless @cache.include?(calendar)
         @cache[calendar]
       end
     end
@@ -59,7 +62,7 @@ module Business
       set_holidays(config[:holidays])
 
       unless (@holidays & @extra_working_dates).none?
-        raise ArgumentError, 'Holidays cannot be extra working dates'
+        raise ArgumentError, "Holidays cannot be extra working dates"
       end
     end
 
@@ -70,12 +73,13 @@ module Business
       working_day?(date) && !holiday?(date)
     end
 
-    def working_day?(date) 
+    def working_day?(date)
       date = date.to_date
-      extra_working_dates.include?(date) || working_days.include?(date.strftime('%a').downcase)
+      extra_working_dates.include?(date) ||
+        working_days.include?(date.strftime("%a").downcase)
     end
 
-    def holiday?(date) 
+    def holiday?(date)
       holidays.include?(date.to_date)
     end
 
@@ -98,19 +102,19 @@ module Business
     # Roll forward to the next business day regardless of whether the given
     # date is a business day or not.
     def next_business_day(date)
-      begin
+      loop do
         date += day_interval_for(date)
-      end until business_day?(date)
-      date
+        break date if business_day?(date)
+      end
     end
 
     # Roll backward to the previous business day regardless of whether the given
     # date is a business day or not.
     def previous_business_day(date)
-      begin
+      loop do
         date -= day_interval_for(date)
-      end until business_day?(date)
-      date
+        break date if business_day?(date)
+      end
     end
 
     # Add a number of business days to a date. If a non-business day is given,
@@ -121,9 +125,10 @@ module Business
     def add_business_days(date, delta)
       date = roll_forward(date)
       delta.times do
-        begin
+        loop do
           date += day_interval_for(date)
-        end until business_day?(date)
+          break date if business_day?(date)
+        end
       end
       date
     end
@@ -136,9 +141,10 @@ module Business
     def subtract_business_days(date, delta)
       date = roll_backward(date)
       delta.times do
-        begin
+        loop do
           date -= day_interval_for(date)
-        end until business_day?(date)
+          break date if business_day?(date)
+        end
       end
       date
     end
@@ -146,8 +152,11 @@ module Business
     # Count the number of business days between two dates.
     # This method counts from start of date1 to start of date2. So,
     # business_days_between(mon, weds) = 2 (assuming no holidays)
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def business_days_between(date1, date2)
-      date1, date2 = date1.to_date, date2.to_date
+      date1 = date1.to_date
+      date2 = date2.to_date
 
       # To optimise this method we split the range into full weeks and a
       # remaining period.
@@ -169,14 +178,16 @@ module Business
       num_biz_days -= holidays.count do |holiday|
         in_range = full_weeks_range.cover?(holiday)
         # Only pick a holiday if its on a working day (e.g., not a weekend)
-        on_biz_day = working_days.include?(holiday.strftime('%a').downcase)
+        on_biz_day = working_days.include?(holiday.strftime("%a").downcase)
         in_range && on_biz_day
       end
 
-      remaining_range = (date2-remaining_days...date2)
+      remaining_range = (date2 - remaining_days...date2)
       # Loop through each day in remaining_range and count if a business day
       num_biz_days + remaining_range.count { |a| business_day?(a) }
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
 
     def day_interval_for(date)
       date.is_a?(Date) ? 1 : 3600 * 24
@@ -189,9 +200,12 @@ module Business
           raise "Invalid day #{day}" unless DAY_NAMES.include?(normalised_day)
         end
       end
-      extra_working_dates_names = @extra_working_dates.map { |d| d.strftime("%a").downcase }
+      extra_working_dates_names = @extra_working_dates.map do |d|
+        d.strftime("%a").downcase
+      end
       return if (extra_working_dates_names & @working_days).none?
-      raise ArgumentError, 'Extra working dates cannot be on working days'
+
+      raise ArgumentError, "Extra working dates cannot be on working days"
     end
 
     def parse_dates(dates)
@@ -209,7 +223,7 @@ module Business
 
     # If no working days are provided in the calendar config, these are used.
     def default_working_days
-      %w( mon tue wed thu fri )
+      %w[mon tue wed thu fri]
     end
   end
 end
