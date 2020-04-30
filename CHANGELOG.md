@@ -1,3 +1,9 @@
+## 1.18.0 - April 30, 2020
+
+### Note we have dropped support for Ruby < 2.4.x
+
+- Correct Danish public holidays
+
 ## 1.17.1 - November 19, 2019
 
 - Change May Bank Holiday 2020 for UK (Bacs) - this was moved to the 8th.
