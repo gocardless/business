@@ -23,9 +23,6 @@ jobs:
       - run:
           name: Run tests
           command: bundle exec rspec
-      # - run:
-      #     name: Run rubocop
-      #     command: bundle exec rubocop --parallel --extra-details --display-style-guide
 
 workflows:
   default:
@@ -34,4 +31,4 @@ workflows:
           name: Ruby << matrix.ruby-version >>
           matrix:
             parameters:
-              ruby-version: ["2.5.8", "2.6.6", "2.7.1"]
+              ruby-version: ["2.4.9", "2.5.8", "2.6.6", "2.7.1"]
