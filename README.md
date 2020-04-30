@@ -1,7 +1,7 @@
 # Business
 
 [![Gem version](https://badge.fury.io/rb/business.svg)](http://badge.fury.io/rb/business)
-[![Build status](https://travis-ci.org/gocardless/business.svg?branch=master)](https://travis-ci.org/gocardless/business)
+[![CircleCI](https://circleci.com/gh/gocardless/business.svg?style=svg)](https://circleci.com/gh/gocardless/business)
 
 Date calculations based on business calendars.
 
