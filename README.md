@@ -81,6 +81,19 @@ calendar = Business::Calendar.load("my_calendars")
 calendar = Business::Calendar.load_cached("my_calendars")
 ```
 
+#### New in version 2.0.0:
+
+Add a hash to the `load_path` array to use already loaded data. This can be useful if loading calendar data from an external source.
+
+```ruby
+Business::Calendar.load_paths = [
+  "path/to/your/calendar/directory",
+  { "foo_calendar" => { "working_days" => ["monday"] } }
+]
+
+Business::Calendar.load("foo_calendar")
+```
+
 ### Checking for business days
 
 To check whether a given date is a business day (falls on one of the specified working days or working dates, and is not a holiday), use the `business_day?` method on `Business::Calendar`.

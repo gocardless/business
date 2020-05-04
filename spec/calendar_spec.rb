@@ -8,9 +8,11 @@ end
 
 describe Business::Calendar do
   describe ".load" do
+    let(:dummy_calendar) { { "working_days" => ["monday"] } }
+
     before do
       fixture_path = File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
-      described_class.load_paths = [fixture_path]
+      described_class.load_paths = [fixture_path, { "foobar" => dummy_calendar }]
     end
 
     context "when given a calendar from a custom directory" do
@@ -35,6 +37,12 @@ describe Business::Calendar do
             to eq(true)
         end
       end
+    end
+
+    context "when loading a calendar as a hash" do
+      subject { described_class.load("foobar") }
+
+      it { is_expected.to be_a Business::Calendar }
     end
 
     context "when given a calendar that does not exist" do
