@@ -10,25 +10,13 @@ describe Business::Calendar do
   describe ".load" do
     before do
       fixture_path = File.join(File.dirname(__FILE__), 'fixtures', 'calendars')
-      Business::Calendar.additional_load_paths = [fixture_path]
-    end
-
-    context "when given a valid calendar" do
-      subject { Business::Calendar.load("weekdays") }
-
-      it "loads the yaml file" do
-        expect(YAML).to receive(:load_file) { |path|
-          expect(path).to match(/weekdays\.yml$/)
-        }.and_return({})
-        subject
-      end
-
-      it { is_expected.to be_a Business::Calendar }
+      described_class.load_paths = [fixture_path]
     end
 
     context "when given a calendar from a custom directory" do
-      after { Business::Calendar.additional_load_paths = nil }
-      subject { Business::Calendar.load("ecb") }
+      subject { described_class.load("ecb") }
+
+      after { described_class.load_paths = nil }
 
       it "loads the yaml file" do
         expect(YAML).to receive(:load_file) { |path|
@@ -67,19 +55,6 @@ describe Business::Calendar do
           calendar = Business::Calendar.load(calendar_name)
 
           expect(calendar.working_days.length).to be >= 1
-        end
-      end
-    end
-  end
-
-  describe "bundled calendars" do
-    calendars = Dir.glob("../lib/business/data*.yml")
-                   .map { |f| File.basename(f, ".yml") }
-
-    calendars.each do |calendar|
-      describe calendar do
-        it "should load without issues" do
-          expect { Business::Calendar.load(calendar) }.not_to raise_error
         end
       end
     end

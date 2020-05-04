@@ -3,12 +3,11 @@ require 'yaml'
 module Business
   class Calendar
     class << self
-      attr_accessor :additional_load_paths
+      attr_accessor :load_paths
     end
 
     def self.calendar_directories
-      directories = @additional_load_paths || []
-      directories + [File.join(File.dirname(__FILE__), 'data')]
+      @load_paths
     end
     private_class_method :calendar_directories
 
