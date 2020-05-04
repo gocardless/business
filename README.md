@@ -13,6 +13,19 @@ To get business, simply:
 $ gem install business
 ```
 
+## Important: 2.0.0 breaking changes
+
+We have removed the bundled calendars as of version 2.0.0, if you need the calendars that were included:
+
+Download the calendars you wish to use from [before version 2](https://github.com/gocardless/business/tree/b12c186ca6fd4ffdac85175742ff7e4d0a705ef4/lib/business/data) and place them in a suitable place in your project.
+
+Then, add the directory to where you placed the yml files before you load the calendar:
+
+```ruby
+Calendar::Business.load_paths("lib/calendars") # your_project/lib/calendars/ contains bacs.yml
+Calendar::Business.load("bacs")
+```
+
 ### Getting started
 
 Get started with business by creating an instance of the calendar class, passing in a hash that specifies with days of the week are considered working days, and which days are holidays.

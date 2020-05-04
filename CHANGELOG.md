@@ -1,3 +1,10 @@
+## 2.0.0 - May 4, 2020
+
+**BREAKING CHANGES** 🚨
+
+- Remove bundled calendars see [this pr](https://github.com/gocardless/business/pull/54) for more context. If you need to use any of the previously bundled calendars, [see here](https://github.com/gocardless/business/tree/b12c186ca6fd4ffdac85175742ff7e4d0a705ef4/lib/business/data)
+- `Business::Calendar.load_paths=` is now required
+
 ## 1.18.0 - April 30, 2020
 
 ### Note we have dropped support for Ruby < 2.4.x
