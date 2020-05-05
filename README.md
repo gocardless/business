@@ -5,30 +5,52 @@
 
 Date calculations based on business calendars.
 
-## Documentation
+- [v2.0.0 breaking changes](#v200-breaking-changes)
+- [Getting Started](#getting-started)
+  - [Creating a calendar](#creating-a-calendar)
+  - [Using a calendar file](#use-a-calendar-file)
+- [Checking for business days](#checking-for-business-days)
+- [Business day arithmetic](#business-day-arithmetic)
+- [But other libraries already do this](#but-other-libraries-already-do-this)
+- [License & Contributing](#license--contributing)
 
-To get business, simply:
-
-```bash
-$ gem install business
-```
-
-## Important: 2.0.0 breaking changes
+## v2.0.0 breaking changes
 
 We have removed the bundled calendars as of version 2.0.0, if you need the calendars that were included:
 
-Download the calendars you wish to use from [before version 2](https://github.com/gocardless/business/tree/b12c186ca6fd4ffdac85175742ff7e4d0a705ef4/lib/business/data) and place them in a suitable place in your project.
-
-Then, add the directory to where you placed the yml files before you load the calendar:
+- Download the calendars you wish to use from [v1.18.0](https://github.com/gocardless/business/tree/b12c186ca6fd4ffdac85175742ff7e4d0a705ef4/lib/business/data)
+- Place them in a suitable directory in your project, typically `lib/calendars`
+-  Add this directory path to your instance of `Business::Calendar` using the `load_paths` method.dd the directory to where you placed the yml files before you load the calendar
 
 ```ruby
-Calendar::Business.load_paths("lib/calendars") # your_project/lib/calendars/ contains bacs.yml
-Calendar::Business.load("bacs")
+Business::Calendar.load_paths("lib/calendars") # your_project/lib/calendars/ contains bacs.yml
+Business::Calendar.load("bacs")
 ```
 
-### Getting started
+If you wish to stay on the last version that contained bundled calendars, pin `business` to `v1.18.0`
 
-Get started with business by creating an instance of the calendar class, passing in a hash that specifies with days of the week are considered working days, and which days are holidays.
+```ruby
+# Gemfile
+gem "business", "v1.18.0"
+```
+
+## Getting started
+
+To install business, simply:
+
+```bash
+gem install business
+```
+
+If you are using a Gemfile:
+
+```ruby
+gem "business", "~> 2.0"
+```
+
+### Creating a calendar
+
+Get started with business by creating an instance of the calendar class, that accepts a hash that specifies which days of the week are considered working days, which days are holidays and which are extra working dates.
 
 ```ruby
 calendar = Business::Calendar.new(
@@ -38,21 +60,27 @@ calendar = Business::Calendar.new(
 )
 ```
 
-### Load a calendar from a file
+### Use a calendar file
 
-#### Calendar file definition
+Defining a calendar as a Ruby object may not be convenient, so we provide a way of defining these calendars as YAML. Below we will walk through the necessary [steps](#example-calendar) to build your first calendar. All keys are optional and will default to the following:
 
-Defining a calendar as a Ruby object may not be convient, to load it from a YAML file follow and customise the example below. All keys are optional and will default to the following:
+Note: Elements of `holidays` and `extra_working_dates` may be either strings that `Date.parse()` [can understand](https://ruby-doc.org/stdlib-2.7.1/libdoc/date/rdoc/Date.html#method-c-parse), or `YYYY-MM-DD` (which is considered as a Date by Ruby YAML itself)[https://github.com/ruby/psych/blob/6ec6e475e8afcf7868b0407fc08014aed886ecf1/lib/psych/scalar_scanner.rb#L60].
 
-- If `working_days` is missing, then common default is used (mon-fri).
-- If `holidays` is missing, "no holidays" assumed.
-- If `extra_working_dates` is missing, then no changes in `working_days` will happen.
+#### YAML file Structure
 
-> Note: Elements of `holidays` and `extra_working_dates` may be eiter strings that `Date.parse()` can understand, or YYYY-MM-DD (which is considered as a Date by Ruby YAML itself).
+```yml
+working_days: # Optional, default [Monday-Friday]
+  -
+holidays: # Optional, default: []  ie: "no holidays" assumed
+  -
+extra_working_dates: # Optional, default: [], ie: no changes in `working_days` will happen
+  -
+```
 
-#### Example
+#### Example calendar
 
 ```yaml
+# lib/calendars/my_calendar.yml
 working_days:
   - Monday
   - Wednesday
@@ -64,37 +92,35 @@ extra_working_dates:
   - 9th March 2020 # A Saturday
 ```
 
-#### Using the calendar
+Ensure the calendar file is saved to a directory that will hold all your calendars, typically `lib/calendars`, then add this directory to your instance of `Business::Calendar` using the `load_paths` method before you call your calendar.
 
-Ensure the calendar file is saved to a directory that will hold all your calendars, eg; `path/to/your/calendar/directory` then add this directory to your code before you call your calendar:
-
-```ruby
-Business::Calendar.load_paths = ["path/to/your/calendar/directory"]
-```
-
-Now you can load the calendar by calling the `load` class method on `Business::Calendar`. The
-`load_cached` variant of this method caches the calendars by name after loading them, to avoid reading and parsing the config file multiple times.
+`load_paths` also accepts an array of plain Ruby hashes with the format:
 
 ```ruby
-calendar = Business::Calendar.load("my_calendars")
-# or
-calendar = Business::Calendar.load_cached("my_calendars")
+  { "calendar_name" => { "working_days" => [] }
 ```
 
-#### New in version 2.0.0:
-
-Add a hash to the `load_path` array to use already loaded data. This can be useful if loading calendar data from an external source.
+#### Example loading both a path and ruby hashes
 
 ```ruby
 Business::Calendar.load_paths = [
-  "path/to/your/calendar/directory",
-  { "foo_calendar" => { "working_days" => ["monday"] } }
+  "lib/calendars",
+  { "foo_calendar" => { "working_days" => ["monday"] } },
+  { "bar_calendar" => { "working_days" => ["sunday"] } },
 ]
-
-Business::Calendar.load("foo_calendar")
 ```
 
-### Checking for business days
+Now you can load the calendar by calling the `Business::Calendar.load(calendar_name)`. In order to avoid parsing the calendar file multiple times, there is a `Business::Calendar.load_cached(calendar_name)` method that caches the calendars by name after loading them.
+
+```ruby
+calendar = Business::Calendar.load("my_calendar") # lib/calendars/my_calendar.yml
+calendar = Business::Calendar.load("foo_calendar")
+# or
+calendar = Business::Calendar.load_cached("my_calendar")
+calendar = Business::Calendar.load_cached("foo_calendar")
+```
+
+## Checking for business days
 
 To check whether a given date is a business day (falls on one of the specified working days or working dates, and is not a holiday), use the `business_day?` method on `Business::Calendar`.
 
@@ -105,7 +131,7 @@ calendar.business_day?(Date.parse("Sunday, 8 June 2014"))
 # => false
 ```
 
-### Business day arithmetic
+## Business day arithmetic
 
 The `add_business_days` and `subtract_business_days` are used to perform business day arithmetic on dates.
 
@@ -144,7 +170,10 @@ essential for us. Business provides a simple `Calendar` class, that is initializ
 
 Secondly, business_time supports calculations on times as well as dates. For our purposes, date-based calculations are sufficient. Supporting time-based calculations as well makes the code significantly more complex. We chose to avoid this extra complexity by sticking solely to date-based mathematics.
 
----
+<p align="center"><img src="http://3.bp.blogspot.com/-aq4iOz2OZzs/Ty8xaQwMhtI/AAAAAAAABrM/-vn4tcRA9-4/s1600/daily-morning-awesomeness-243.jpeg" alt="I'm late for business" width="250"/></p>
 
+## License & Contributing
+- business is available as open source under the terms of the [MIT License](LICENSE).
+- Bug reports and pull requests are welcome on GitHub at https://github.com/gocardless/business.
 
-![I'm late for business](http://3.bp.blogspot.com/-aq4iOz2OZzs/Ty8xaQwMhtI/AAAAAAAABrM/-vn4tcRA9-4/s1600/daily-morning-awesomeness-243.jpeg)
+GoCardless ♥ open source. If you do too, come [join us](https://gocardless.com/about/jobs).
