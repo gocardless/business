@@ -1,14 +1,9 @@
 require 'yaml'
-require_relative '../calendar_rust'
 
 module Business
-  module Calendar
-    # class << self
-    #   attr_accessor :additional_load_paths
-    # end
-
-    def self.additional_load_paths=(paths)
-      @additional_load_paths = paths
+  class Calendar
+    class << self
+      attr_accessor :additional_load_paths
     end
 
     def self.calendar_directories
@@ -30,8 +25,16 @@ module Business
         raise "Only valid keys are: #{valid_keys.join(', ')}"
       end
 
-      self.new(holidays: yaml['holidays'], working_days: yaml['working_days'],
+      self.sanitise_and_load(holidays: yaml['holidays'], working_days: yaml['working_days'],
                extra_working_dates: yaml['extra_working_dates'])
+    end
+
+    def self.sanitise_and_load(config)
+      holidays = config[:holidays]&.map { |d| Date.parse(d).to_s }
+      working_days = config[:working_days]&.map { |x| x[0, 3] }
+      extra_working_dates = config[:extra_working_dates]&.map { |d| Date.parse(d).to_s }
+
+      self.new(holidays: holidays, working_days: working_days, extra_working_dates: extra_working_dates)
     end
 
     @lock = Mutex.new
@@ -47,19 +50,11 @@ module Business
 
     DAY_NAMES = %( mon tue wed thu fri sat sun )
 
-    attr_reader :holidays, :working_days, :extra_working_dates
-
-    # def initialize(config)
-    #   set_extra_working_dates(config[:extra_working_dates])
-    #   set_working_days(config[:working_days])
-    #   set_holidays(config[:holidays])
-    # end
-
     # Roll backward to the previous business day. If the date given is a
     # business day, that day will be returned. If the day given is a holiday or
     # non-working day, the previous non-holiday working day will be returned.
     def roll_backward(date)
-      date -= day_interval_for(date) until business_day?(date)
+      date -= day_interval_for(date) until business_day?(date.to_s)
       date
     end
 
@@ -68,7 +63,7 @@ module Business
     def next_business_day(date)
       begin
         date += day_interval_for(date)
-      end until business_day?(date)
+      end until business_day?(date.to_s)
       date
     end
 
@@ -77,7 +72,7 @@ module Business
     def previous_business_day(date)
       begin
         date -= day_interval_for(date)
-      end until business_day?(date)
+      end until business_day?(date.to_s)
       date
     end
 
@@ -91,7 +86,7 @@ module Business
       delta.times do
         begin
           date -= day_interval_for(date)
-        end until business_day?(date)
+        end until business_day?(date.to_s)
       end
       date
     end
@@ -120,6 +115,7 @@ module Business
 
       full_weeks_range = (date1...(date2 - remaining_days))
       num_biz_days -= holidays.count do |holiday|
+        holiday = Date.parse(holiday)
         in_range = full_weeks_range.cover?(holiday)
         # Only pick a holiday if its on a working day (e.g., not a weekend)
         on_biz_day = working_days.include?(holiday.strftime('%a').downcase)
@@ -128,7 +124,7 @@ module Business
 
       remaining_range = (date2-remaining_days...date2)
       # Loop through each day in remaining_range and count if a business day
-      num_biz_days + remaining_range.count { |a| business_day?(a) }
+      num_biz_days + remaining_range.count { |a| business_day?(a.to_s) }
     end
 
     def day_interval_for(date)
@@ -142,7 +138,7 @@ module Business
           raise "Invalid day #{day}" unless DAY_NAMES.include?(normalised_day)
         end
       end
-      extra_working_dates_names = @extra_working_dates.map { |d| d.strftime("%a").downcase }
+      extra_working_dates_names = @extra_working_dates.map { |d| Date.parse(d).strftime("%a").downcase }
       return if (extra_working_dates_names & @working_days).none?
       raise ArgumentError, 'Extra working dates cannot be on working days'
     end

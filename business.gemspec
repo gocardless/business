@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rutie', '~> 0.0.3'
 
+  spec.add_development_dependency "pry"
   spec.add_development_dependency "rspec", "~> 3.1"
   spec.add_development_dependency "rspec_junit_formatter", "~> 0.4.1"
 end

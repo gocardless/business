@@ -8,22 +8,45 @@ use chrono::{NaiveDate, Duration};
 
 use rutie::{Class, Object, RString, Array, Boolean, VM, Integer, AnyObject, Hash, Symbol};
 
-class!(CalendarRust);
+class!(Calendar);
 
 methods!(
-    CalendarRust,
+    Calendar,
     itself,
 
     fn calendar_rust_new(config: Hash) -> AnyObject {
-        let working_days = config.unwrap().at(&Symbol::new("working_days"))
+        let config = config.unwrap_or(Hash::new());
+
+        let working_days = config.at(&Symbol::new("working_days"))
             .try_convert_to::<Array>()
-            .unwrap().into_iter()
+            .unwrap_or(Array::new())
+            .into_iter()
             .map(|x| x.try_convert_to::<RString>())
             .map(|x| x.unwrap().to_string())
             .collect();
 
-        println!("{:?}", &working_days);
-        Class::from_existing("CalendarRust").wrap_data(Calendar::new(working_days), &*CALENDAR_WRAPPER)
+        let holidays: Vec<_> = config.at(&Symbol::new("holidays"))
+            .try_convert_to::<Array>()
+            .unwrap_or(Array::new())
+            .into_iter()
+            .map(|x| x.try_convert_to::<RString>())
+            .map(|x| x.unwrap())
+            .map(|x| NaiveDate::parse_from_str(x.to_str(), "%Y-%m-%d").unwrap())
+            .collect();
+
+        let extra_working_dates: Vec<_> = config.at(&Symbol::new("extra_working_dates"))
+            .try_convert_to::<Array>()
+            .unwrap_or(Array::new())
+            .into_iter()
+            .map(|x| x.try_convert_to::<RString>())
+            .map(|x| x.unwrap())
+            .map(|x| NaiveDate::parse_from_str(x.to_str(), "%Y-%m-%d").unwrap())
+            .collect();
+
+        Class::from_existing("Calendar").wrap_data(
+            CalendarState::new(extra_working_dates, working_days, holidays),
+            &*CALENDAR_WRAPPER
+        )
     }
 
     // If no working days are provided in the calendar config, these are used.
@@ -81,28 +104,58 @@ methods!(
         let result = itself.get_data(&*CALENDAR_WRAPPER).add_business_days(&date, delta);
         RString::new_utf8(&result.format("%Y-%m-%d").to_string())
     }
+
+    fn working_days() -> Array {
+        let result = &itself.get_data(&*CALENDAR_WRAPPER).working_days;
+        let mut arr = Array::with_capacity(result.len());
+        for r in result {
+            arr.push(RString::new_utf8(&r));
+        }
+        arr
+    }
+
+    fn holidays() -> Array {
+        let result = &itself.get_data(&*CALENDAR_WRAPPER).holidays;
+        let mut arr = Array::with_capacity(result.len());
+        for r in result {
+            arr.push(RString::new_utf8(&r.format("%Y-%m-%d").to_string()));
+        }
+        arr
+    }
+
+    fn extra_working_dates() -> Array {
+        let result = &itself.get_data(&*CALENDAR_WRAPPER).extra_working_dates;
+        let mut arr = Array::with_capacity(result.len());
+        for r in result {
+            arr.push(RString::new_utf8(&r.format("%Y-%m-%d").to_string()));
+        }
+        arr
+    }
 );
 
 #[allow(non_snake_case)]
 #[no_mangle]
-pub extern "C" fn Init_calendar_rust() {
-    Class::new("CalendarRust", None).define(|itself| {
+pub extern "C" fn Init_business() {
+    Class::new("Calendar", None).define(|itself| {
         itself.def_self("new", calendar_rust_new);
         itself.def("default_working_days", default_working_days);
         itself.def("business_day?", is_business_day);
         itself.def("roll_forward", roll_forward);
         itself.def("add_business_days", add_business_days);
+        itself.def("working_days", working_days);
+        itself.def("holidays", holidays);
+        itself.def("extra_working_dates", extra_working_dates);
     });
 }
 
-pub struct Calendar {
+pub struct CalendarState {
     working_days: Vec<String>,
     holidays: Vec<NaiveDate>,
     extra_working_dates: Vec<NaiveDate>,
 }
 
-impl Calendar {
-    fn new(working_days: Vec<String>) -> Self {
+impl CalendarState {
+    fn new(extra_working_dates: Vec<NaiveDate>, working_days: Vec<String>, holidays: Vec<NaiveDate>) -> Self {
         let working_days = if working_days.is_empty() {
             vec![
                 "mon".to_string(),
@@ -115,11 +168,7 @@ impl Calendar {
             working_days
         };
 
-        Calendar {
-            working_days,
-            holidays: vec![NaiveDate::from_ymd(2019, 12, 25)],
-            extra_working_dates: Vec::new(),
-        }
+        Self { working_days, holidays, extra_working_dates }
     }
 
     // Return true if the date given is a business day (typically that means a
@@ -167,4 +216,4 @@ impl Calendar {
     }
 }
 
-wrappable_struct!(Calendar, CalendarWrapper, CALENDAR_WRAPPER);
+wrappable_struct!(CalendarState, CalendarWrapper, CALENDAR_WRAPPER);
