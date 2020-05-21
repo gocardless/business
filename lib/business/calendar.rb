@@ -55,24 +55,6 @@ module Business
       set_holidays(config[:holidays])
     end
 
-    # Return true if the date given is a business day (typically that means a
-    # non-weekend day) and not a holiday.
-    # def business_day?(date)
-    #   date = date.to_date
-    #   return true if extra_working_dates.include?(date)
-    #   return false unless working_days.include?(date.strftime('%a').downcase)
-    #   return false if holidays.include?(date)
-    #   true
-    # end
-
-    # Roll forward to the next business day. If the date given is a business
-    # day, that day will be returned. If the day given is a holiday or
-    # non-working day, the next non-holiday working day will be returned.
-    def roll_forward(date)
-      date += day_interval_for(date) until business_day?(date)
-      date
-    end
-
     # Roll backward to the previous business day. If the date given is a
     # business day, that day will be returned. If the day given is a holiday or
     # non-working day, the previous non-holiday working day will be returned.
@@ -96,21 +78,6 @@ module Business
       begin
         date -= day_interval_for(date)
       end until business_day?(date)
-      date
-    end
-
-    # Add a number of business days to a date. If a non-business day is given,
-    # counting will start from the next business day. So,
-    #   monday + 1 = tuesday
-    #   friday + 1 = monday
-    #   sunday + 1 = tuesday
-    def add_business_days(date, delta)
-      date = roll_forward(date)
-      delta.times do
-        begin
-          date += day_interval_for(date)
-        end until business_day?(date)
-      end
       date
     end
 
