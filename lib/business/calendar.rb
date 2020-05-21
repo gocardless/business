@@ -49,11 +49,11 @@ module Business
 
     attr_reader :holidays, :working_days, :extra_working_dates
 
-    def initialize(config)
-      set_extra_working_dates(config[:extra_working_dates])
-      set_working_days(config[:working_days])
-      set_holidays(config[:holidays])
-    end
+    # def initialize(config)
+    #   set_extra_working_dates(config[:extra_working_dates])
+    #   set_working_days(config[:working_days])
+    #   set_holidays(config[:holidays])
+    # end
 
     # Roll backward to the previous business day. If the date given is a
     # business day, that day will be returned. If the day given is a holiday or

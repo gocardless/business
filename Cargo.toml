@@ -9,6 +9,7 @@ edition = "2018"
 [dependencies]
 rutie = { git = "https://github.com/danielpclark/rutie", branch = "master", features=["no-link"] }
 chrono = "0.4"
+lazy_static = "1.4.0"
 
 [lib]
 name = "calendar_rust"
