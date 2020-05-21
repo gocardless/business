@@ -1,10 +1,13 @@
 require 'yaml'
+require_relative '../calendar_rust'
 
 module Business
   class Calendar
     class << self
       attr_accessor :additional_load_paths
     end
+
+    include CalendarRust
 
     def self.calendar_directories
       directories = @additional_load_paths || []
@@ -188,11 +191,6 @@ module Business
 
     def set_extra_working_dates(extra_working_dates)
       @extra_working_dates = parse_dates(extra_working_dates)
-    end
-
-    # If no working days are provided in the calendar config, these are used.
-    def default_working_days
-      %w( mon tue wed thu fri )
     end
   end
 end

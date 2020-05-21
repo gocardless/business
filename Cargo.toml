@@ -10,12 +10,5 @@ edition = "2018"
 rutie = { git = "https://github.com/danielpclark/rutie", branch = "master", features=["no-link"] }
 
 [lib]
-name = "rutie_ruby_example"
+name = "calendar_rust"
 crate-type = ["dylib"]
-
-[target.x86_64-apple-darwin]
-rustflags = [
-  "-C", "link-arg=-Wl",
-  "-C", "link-arg=-undefined",
-  "-C", "link-arg=dynamic_lookup",
-]
