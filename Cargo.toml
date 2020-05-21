@@ -1,0 +1,16 @@
+[package]
+name = "business"
+version = "0.1.0"
+authors = ["Amey Kusurkar <amey1000@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rutie = { git = "https://github.com/danielpclark/rutie", branch = "master", features=["no-link"] }
+chrono = "0.4"
+lazy_static = "1.4.0"
+
+[lib]
+name = "business"
+crate-type = ["dylib"]
