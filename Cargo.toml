@@ -1,0 +1,21 @@
+[package]
+name = "business"
+version = "0.1.0"
+authors = ["Amey Kusurkar <amey1000@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rutie = { git = "https://github.com/danielpclark/rutie", branch = "master", features=["no-link"] }
+
+[lib]
+name = "rutie_ruby_example"
+crate-type = ["dylib"]
+
+[target.x86_64-apple-darwin]
+rustflags = [
+  "-C", "link-arg=-Wl",
+  "-C", "link-arg=-undefined",
+  "-C", "link-arg=dynamic_lookup",
+]
