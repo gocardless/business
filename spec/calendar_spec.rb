@@ -1,4 +1,5 @@
-require "business/calendar"
+# require "business/calendar"
+require "calendar_rust"
 require "time"
 
 RSpec.configure do |config|
@@ -6,7 +7,8 @@ RSpec.configure do |config|
   config.raise_errors_for_deprecations!
 end
 
-describe Business::Calendar do
+# describe Business::Calendar do
+describe CalendarRust do
   describe ".load" do
     before do
       fixture_path = File.join(File.dirname(__FILE__), 'fixtures', 'calendars')

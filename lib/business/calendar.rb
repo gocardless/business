@@ -2,12 +2,14 @@ require 'yaml'
 require_relative '../calendar_rust'
 
 module Business
-  class Calendar
-    class << self
-      attr_accessor :additional_load_paths
-    end
+  module Calendar
+    # class << self
+    #   attr_accessor :additional_load_paths
+    # end
 
-    include CalendarRust
+    def self.additional_load_paths=(paths)
+      @additional_load_paths = paths
+    end
 
     def self.calendar_directories
       directories = @additional_load_paths || []
@@ -55,13 +57,13 @@ module Business
 
     # Return true if the date given is a business day (typically that means a
     # non-weekend day) and not a holiday.
-    def business_day?(date)
-      date = date.to_date
-      return true if extra_working_dates.include?(date)
-      return false unless working_days.include?(date.strftime('%a').downcase)
-      return false if holidays.include?(date)
-      true
-    end
+    # def business_day?(date)
+    #   date = date.to_date
+    #   return true if extra_working_dates.include?(date)
+    #   return false unless working_days.include?(date.strftime('%a').downcase)
+    #   return false if holidays.include?(date)
+    #   true
+    # end
 
     # Roll forward to the next business day. If the date given is a business
     # day, that day will be returned. If the day given is a holiday or
