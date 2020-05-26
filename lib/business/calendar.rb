@@ -1,32 +1,41 @@
 require 'yaml'
+require 'date'
 
 module Business
   class Calendar
     class << self
-      attr_accessor :additional_load_paths
+      attr_accessor :load_paths
     end
 
     def self.calendar_directories
-      directories = @additional_load_paths || []
-      directories + [File.join(File.dirname(__FILE__), 'data')]
+      @load_paths
     end
     private_class_method :calendar_directories
 
-    def self.load(calendar)
-      directory = calendar_directories.find do |dir|
-        File.exists?(File.join(dir, "#{calendar}.yml"))
-      end
-      raise "No such calendar '#{calendar}'" unless directory
+    def self.load(calendar_name)
+      data = calendar_directories.detect do |path|
+        if path.is_a?(Hash)
+          break path[calendar_name] if path[calendar_name]
+        else
+          next unless File.exists?(File.join(path, "#{calendar_name}.yml"))
 
-      yaml = YAML.load_file(File.join(directory, "#{calendar}.yml"))
+          break YAML.load_file(File.join(path, "#{calendar_name}.yml"))
+        end
+      end
+
+      raise "No such calendar '#{calendar_name}'" unless data
+
       valid_keys = %w(holidays working_days extra_working_dates)
 
-      unless (yaml.keys - valid_keys).empty?
+      unless (data.keys - valid_keys).empty?
         raise "Only valid keys are: #{valid_keys.join(', ')}"
       end
 
-      self.new(holidays: yaml['holidays'], working_days: yaml['working_days'],
-               extra_working_dates: yaml['extra_working_dates'])
+      self.new(
+        holidays: data['holidays'],
+        working_days: data['working_days'],
+        extra_working_dates: data['extra_working_dates'],
+      )
     end
 
     @lock = Mutex.new
