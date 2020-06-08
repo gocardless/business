@@ -57,16 +57,26 @@ module Business
       set_extra_working_dates(config[:extra_working_dates])
       set_working_days(config[:working_days])
       set_holidays(config[:holidays])
+
+      unless (@holidays & @extra_working_dates).none?
+        raise ArgumentError, 'Holidays cannot be extra working dates'
+      end
     end
 
     # Return true if the date given is a business day (typically that means a
     # non-weekend day) and not a holiday.
     def business_day?(date)
       date = date.to_date
-      return true if extra_working_dates.include?(date)
-      return false unless working_days.include?(date.strftime('%a').downcase)
-      return false if holidays.include?(date)
-      true
+      working_day?(date) && !holiday?(date)
+    end
+
+    def working_day?(date) 
+      date = date.to_date
+      extra_working_dates.include?(date) || working_days.include?(date.strftime('%a').downcase)
+    end
+
+    def holiday?(date) 
+      holidays.include?(date.to_date)
     end
 
     # Roll forward to the next business day. If the date given is a business
@@ -191,8 +201,6 @@ module Business
     # Internal method for assigning holidays from a calendar config.
     def set_holidays(holidays)
       @holidays = parse_dates(holidays)
-      return if (@holidays & @extra_working_dates).none?
-      raise ArgumentError, 'Holidays cannot be extra working dates'
     end
 
     def set_extra_working_dates(extra_working_dates)
