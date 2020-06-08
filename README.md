@@ -131,6 +131,20 @@ calendar.business_day?(Date.parse("Sunday, 8 June 2014"))
 # => false
 ```
 
+More specifically you can check if a given `business_day?` is either a `working_day?` or a `holiday?` using methods on `Business::Calendar`.
+
+```ruby
+# Assuming "Monday, 9 June 2014" is a holiday
+calendar.working_day?(Date.parse("Monday, 9 June 2014"))
+# => true
+calendar.holiday?(Date.parse("Monday, 9 June 2014"))
+# => true
+# Monday is a working day, but we have a holiday so it's not
+# a business day
+calendar.business_day?(Date.parse("Monday, 9 June 2014"))
+# => false
+```
+
 ## Business day arithmetic
 
 The `add_business_days` and `subtract_business_days` are used to perform business day arithmetic on dates.

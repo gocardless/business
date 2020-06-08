@@ -202,6 +202,62 @@ describe Business::Calendar do
       end
     end
 
+    describe "#working_day?" do
+      let(:calendar) do
+        Business::Calendar.new(holidays: ["9am, Tuesday 1st Jan, 2013"],
+                               extra_working_dates: ["9am, Sunday 6th Jan, 2013"])
+      end
+      subject { calendar.working_day?(day) }
+
+      context "when given a working day" do
+        let(:day) { date_class.parse("9am, Wednesday 2nd Jan, 2013") }
+        it { is_expected.to be_truthy }
+      end
+
+      context "when given a non-working day" do
+        let(:day) { date_class.parse("9am, Saturday 5th Jan, 2013") }
+        it { is_expected.to be_falsey }
+      end
+
+      context "when given a working day that is a holiday" do
+        let(:day) { date_class.parse("9am, Tuesday 1st Jan, 2013") }
+        it { is_expected.to be_truthy }
+      end
+
+      context "when given a non-business day that is a working date" do
+        let(:day) { date_class.parse("9am, Sunday 6th Jan, 2013") }
+        it { is_expected.to be_truthy }
+      end
+    end
+
+    describe "#holiday?" do
+      let(:calendar) do
+        Business::Calendar.new(holidays: ["9am, Tuesday 1st Jan, 2013"],
+                               extra_working_dates: ["9am, Sunday 6th Jan, 2013"])
+      end
+      subject { calendar.holiday?(day) }
+
+      context "when given a working day that is not a holiday" do
+        let(:day) { date_class.parse("9am, Wednesday 2nd Jan, 2013") }
+        it { is_expected.to be_falsey }
+      end
+
+      context "when given a non-working day that is not a holiday day" do
+        let(:day) { date_class.parse("9am, Saturday 5th Jan, 2013") }
+        it { is_expected.to be_falsey }
+      end
+
+      context "when given a day that is a holiday" do
+        let(:day) { date_class.parse("9am, Tuesday 1st Jan, 2013") }
+        it { is_expected.to be_truthy }
+      end
+
+      context "when given a non-business day that is no a holiday" do
+        let(:day) { date_class.parse("9am, Sunday 6th Jan, 2013") }
+        it { is_expected.to be_falsey }
+      end
+    end
+
     describe "#roll_forward" do
       let(:calendar) do
         Business::Calendar.new(holidays: ["Tuesday 1st Jan, 2013"])

@@ -63,10 +63,16 @@ module Business
     # non-weekend day) and not a holiday.
     def business_day?(date)
       date = date.to_date
-      return true if extra_working_dates.include?(date)
-      return false unless working_days.include?(date.strftime('%a').downcase)
-      return false if holidays.include?(date)
-      true
+      working_day?(date) && !holiday?(date)
+    end
+
+    def working_day?(date) 
+      date = date.to_date
+      extra_working_dates.include?(date) || working_days.include?(date.strftime('%a').downcase)
+    end
+
+    def holiday?(date) 
+      holidays.include?(date.to_date)
     end
 
     # Roll forward to the next business day. If the date given is a business

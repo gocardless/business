@@ -1,3 +1,7 @@
+## 2.1.0 - June 8, 2020
+
+- Add seperate `working_day?` and `holiday?` methods to the calendar
+
 ## 2.0.0 - May 4, 2020
 
 🚨 **BREAKING CHANGES** 🚨
