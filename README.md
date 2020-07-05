@@ -23,7 +23,7 @@ We have removed the bundled calendars as of version 2.0.0, if you need the calen
 -  Add this directory path to your instance of `Business::Calendar` using the `load_paths` method.dd the directory to where you placed the yml files before you load the calendar
 
 ```ruby
-Business::Calendar.load_paths("lib/calendars") # your_project/lib/calendars/ contains bacs.yml
+Business::Calendar.load_paths = ["lib/calendars"] # your_project/lib/calendars/ contains bacs.yml
 Business::Calendar.load("bacs")
 ```
 
