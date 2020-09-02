@@ -1,0 +1,13 @@
+inherit_gem:
+  gc_ruboconfig: rubocop.yml
+
+RSpec/NestedGroups:
+  Exclude:
+    - spec/business/calendar_spec.rb
+
+# Disabled as API uses set_holidays etc
+Naming/AccessorMethodName:
+  Enabled: false
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
