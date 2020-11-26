@@ -23,5 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "gc_ruboconfig", "~> 2.20.0"
   spec.add_development_dependency "rspec", "~> 3.1"
   spec.add_development_dependency "rspec_junit_formatter", "~> 0.4.1"
-  spec.add_development_dependency "rubocop", "~> 1.3.0"
+  spec.add_development_dependency "rubocop", "~> 1.4.2"
 end
