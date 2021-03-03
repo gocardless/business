@@ -25,9 +25,8 @@ module Business
       end
 
       new(
-        holidays: data["holidays"],
-        working_days: data["working_days"],
-        extra_working_dates: data["extra_working_dates"],
+        calendar_name,
+        **data.slice("holidays", "working_days", "extra_working_days"),
       )
     end
 
@@ -54,9 +53,10 @@ module Business
 
     DAY_NAMES = %( mon tue wed thu fri sat sun )
 
-    attr_reader :holidays, :working_days, :extra_working_dates
+    attr_reader :name, :holidays, :working_days, :extra_working_dates
 
-    def initialize(config)
+    def initialize(name, config)
+      @name = name
       set_extra_working_dates(config[:extra_working_dates])
       set_working_days(config[:working_days])
       set_holidays(config[:holidays])
