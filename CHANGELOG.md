@@ -1,3 +1,7 @@
+## 2.2.0 - March 4, 2021
+
+- Add `Business::Calendar#name` - thanks @mattmcf!
+
 ## 2.1.0 - June 8, 2020
 
 - Add seperate `working_day?` and `holiday?` methods to the calendar
