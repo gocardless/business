@@ -25,8 +25,10 @@ module Business
       end
 
       new(
-        calendar_name,
-        **data.slice("holidays", "working_days", "extra_working_days"),
+        name: calendar_name,
+        holidays: data["holidays"],
+        working_days: data["working_days"],
+        extra_working_dates: data["extra_working_days"],
       )
     end
 
@@ -53,13 +55,13 @@ module Business
 
     DAY_NAMES = %( mon tue wed thu fri sat sun )
 
-    attr_reader :name, :holidays, :working_days, :extra_working_dates
+    attr_reader :name,:holidays, :working_days, :extra_working_dates
 
-    def initialize(name, config)
+    def initialize(name:, extra_working_dates: nil, working_days: nil, holidays: nil)
       @name = name
-      set_extra_working_dates(config[:extra_working_dates])
-      set_working_days(config[:working_days])
-      set_holidays(config[:holidays])
+      set_extra_working_dates(extra_working_dates)
+      set_working_days(working_days)
+      set_holidays(holidays)
 
       unless (@holidays & @extra_working_dates).none?
         raise ArgumentError, "Holidays cannot be extra working dates"
