@@ -29,7 +29,7 @@ module Business
         name: calendar_name,
         holidays: data["holidays"],
         working_days: data["working_days"],
-        extra_working_dates: data["extra_working_days"],
+        extra_working_dates: data["extra_working_dates"],
       )
     end
     # rubocop:enable Metrics/MethodLength
