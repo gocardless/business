@@ -16,6 +16,7 @@ module Business
     end
     private_class_method :calendar_directories
 
+    # rubocop:disable Metrics/MethodLength
     def self.load(calendar_name)
       data = find_calendar_data(calendar_name)
       raise "No such calendar '#{calendar_name}'" unless data
@@ -25,11 +26,13 @@ module Business
       end
 
       new(
+        name: calendar_name,
         holidays: data["holidays"],
         working_days: data["working_days"],
         extra_working_dates: data["extra_working_dates"],
       )
     end
+    # rubocop:enable Metrics/MethodLength
 
     def self.find_calendar_data(calendar_name)
       calendar_directories.detect do |path|
@@ -54,12 +57,13 @@ module Business
 
     DAY_NAMES = %( mon tue wed thu fri sat sun )
 
-    attr_reader :holidays, :working_days, :extra_working_dates
+    attr_reader :name, :holidays, :working_days, :extra_working_dates
 
-    def initialize(config)
-      set_extra_working_dates(config[:extra_working_dates])
-      set_working_days(config[:working_days])
-      set_holidays(config[:holidays])
+    def initialize(name:, extra_working_dates: nil, working_days: nil, holidays: nil)
+      @name = name
+      set_extra_working_dates(extra_working_dates)
+      set_working_days(working_days)
+      set_holidays(holidays)
 
       unless (@holidays & @extra_working_dates).none?
         raise ArgumentError, "Holidays cannot be extra working dates"

@@ -84,7 +84,7 @@ RSpec.describe Business::Calendar do
   describe "#set_working_days" do
     subject(:set_working_days) { calendar.set_working_days(working_days) }
 
-    let(:calendar) { described_class.new({}) }
+    let(:calendar) { described_class.new(name: "test") }
     let(:working_days) { [] }
 
     context "when given valid working days" do
@@ -123,7 +123,7 @@ RSpec.describe Business::Calendar do
   describe "#set_holidays" do
     subject(:holidays) { calendar.holidays }
 
-    let(:calendar) { described_class.new({}) }
+    let(:calendar) { described_class.new(name: "test") }
     let(:holiday_dates) { [] }
 
     before { calendar.set_holidays(holiday_dates) }
@@ -148,7 +148,7 @@ RSpec.describe Business::Calendar do
   describe "#set_extra_working_dates" do
     subject(:extra_working_dates) { calendar.extra_working_dates }
 
-    let(:calendar) { described_class.new({}) }
+    let(:calendar) { described_class.new(name: "test") }
     let(:extra_dates) { [] }
 
     before { calendar.set_extra_working_dates(extra_dates) }
@@ -172,7 +172,8 @@ RSpec.describe Business::Calendar do
 
   context "when holiday is also a working date" do
     let(:instance) do
-      described_class.new(holidays: ["2018-01-06"],
+      described_class.new(name: "test",
+                          holidays: ["2018-01-06"],
                           extra_working_dates: ["2018-01-06"])
     end
 
@@ -184,7 +185,8 @@ RSpec.describe Business::Calendar do
 
   context "when working date on working day" do
     let(:instance) do
-      described_class.new(working_days: ["mon"],
+      described_class.new(name: "test",
+                          working_days: ["mon"],
                           extra_working_dates: ["Monday 26th Mar, 2018"])
     end
 
@@ -202,7 +204,8 @@ RSpec.describe Business::Calendar do
       subject { calendar.business_day?(day) }
 
       let(:calendar) do
-        described_class.new(holidays: ["9am, Tuesday 1st Jan, 2013"],
+        described_class.new(name: "test",
+                            holidays: ["9am, Tuesday 1st Jan, 2013"],
                             extra_working_dates: ["9am, Sunday 6th Jan, 2013"])
       end
 
@@ -235,7 +238,8 @@ RSpec.describe Business::Calendar do
       subject { calendar.working_day?(day) }
 
       let(:calendar) do
-        described_class.new(holidays: ["9am, Tuesday 1st Jan, 2013"],
+        described_class.new(name: "test",
+                            holidays: ["9am, Tuesday 1st Jan, 2013"],
                             extra_working_dates: ["9am, Sunday 6th Jan, 2013"])
       end
 
@@ -268,7 +272,8 @@ RSpec.describe Business::Calendar do
       subject { calendar.holiday?(day) }
 
       let(:calendar) do
-        described_class.new(holidays: ["9am, Tuesday 1st Jan, 2013"],
+        described_class.new(name: "test",
+                            holidays: ["9am, Tuesday 1st Jan, 2013"],
                             extra_working_dates: ["9am, Sunday 6th Jan, 2013"])
       end
 
@@ -301,7 +306,7 @@ RSpec.describe Business::Calendar do
       subject { calendar.roll_forward(date) }
 
       let(:calendar) do
-        described_class.new(holidays: ["Tuesday 1st Jan, 2013"])
+        described_class.new(name: "test", holidays: ["Tuesday 1st Jan, 2013"])
       end
 
       context "given a business day" do
@@ -329,7 +334,7 @@ RSpec.describe Business::Calendar do
       subject { calendar.roll_backward(date) }
 
       let(:calendar) do
-        described_class.new(holidays: ["Tuesday 1st Jan, 2013"])
+        described_class.new(name: "test", holidays: ["Tuesday 1st Jan, 2013"])
       end
 
       context "given a business day" do
@@ -357,7 +362,7 @@ RSpec.describe Business::Calendar do
       subject { calendar.next_business_day(date) }
 
       let(:calendar) do
-        described_class.new(holidays: ["Tuesday 1st Jan, 2013"])
+        described_class.new(name: "test", holidays: ["Tuesday 1st Jan, 2013"])
       end
 
       context "given a business day" do
@@ -385,7 +390,7 @@ RSpec.describe Business::Calendar do
       subject { calendar.previous_business_day(date) }
 
       let(:calendar) do
-        described_class.new(holidays: ["Tuesday 1st Jan, 2013"])
+        described_class.new(name: "test", holidays: ["Tuesday 1st Jan, 2013"])
       end
 
       context "given a business day" do
@@ -414,7 +419,8 @@ RSpec.describe Business::Calendar do
 
       let(:extra_working_dates) { [] }
       let(:calendar) do
-        described_class.new(holidays: ["Tuesday 1st Jan, 2013"],
+        described_class.new(name: "test",
+                            holidays: ["Tuesday 1st Jan, 2013"],
                             extra_working_dates: extra_working_dates)
       end
       let(:delta) { 2 }
@@ -458,7 +464,8 @@ RSpec.describe Business::Calendar do
 
       let(:extra_working_dates) { [] }
       let(:calendar) do
-        described_class.new(holidays: ["Thursday 3rd Jan, 2013"],
+        described_class.new(name: "test",
+                            holidays: ["Thursday 3rd Jan, 2013"],
                             extra_working_dates: extra_working_dates)
       end
       let(:delta) { 2 }
@@ -511,7 +518,9 @@ RSpec.describe Business::Calendar do
         ["Sun 1/6/2014", "Sat 28/6/2014", "Sat 5/7/2014"]
       end
       let(:calendar) do
-        described_class.new(holidays: holidays, extra_working_dates: extra_working_dates)
+        described_class.new(name: "test",
+                            holidays: holidays,
+                            extra_working_dates: extra_working_dates)
       end
 
       context "starting on a business day" do
