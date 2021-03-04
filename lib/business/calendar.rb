@@ -16,6 +16,7 @@ module Business
     end
     private_class_method :calendar_directories
 
+    # rubocop:disable Metrics/MethodLength
     def self.load(calendar_name)
       data = find_calendar_data(calendar_name)
       raise "No such calendar '#{calendar_name}'" unless data
@@ -31,6 +32,7 @@ module Business
         extra_working_dates: data["extra_working_days"],
       )
     end
+    # rubocop:enable Metrics/MethodLength
 
     def self.find_calendar_data(calendar_name)
       calendar_directories.detect do |path|
@@ -55,7 +57,7 @@ module Business
 
     DAY_NAMES = %( mon tue wed thu fri sat sun )
 
-    attr_reader :name,:holidays, :working_days, :extra_working_dates
+    attr_reader :name, :holidays, :working_days, :extra_working_dates
 
     def initialize(name:, extra_working_dates: nil, working_days: nil, holidays: nil)
       @name = name
