@@ -59,7 +59,7 @@ module Business
 
     attr_reader :name, :holidays, :working_days, :extra_working_dates
 
-    def initialize(name:, extra_working_dates: nil, working_days: nil, holidays: nil)
+    def initialize(name: nil, extra_working_dates: nil, working_days: nil, holidays: nil)
       @name = name
       set_extra_working_dates(extra_working_dates)
       set_working_days(working_days)
