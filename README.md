@@ -52,8 +52,11 @@ gem "business", "~> 2.0"
 
 Get started with business by creating an instance of the calendar class, that accepts a hash that specifies which days of the week are considered working days, which days are holidays and which are extra working dates.
 
+Additionally each calendar instance can be given a name. This can come in handy if you use multiple calendars.
+
 ```ruby
 calendar = Business::Calendar.new(
+  name: 'my calendar',
   working_days: %w( mon tue wed thu fri ),
   holidays: ["01/01/2014", "03/01/2014"],    # array items are either parseable date strings, or real Date objects
   extra_working_dates: [nil], # Makes the calendar to consider a weekend day as a working day.
