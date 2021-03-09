@@ -55,7 +55,7 @@ Get started with business by creating an instance of the calendar class, that ac
 ```ruby
 calendar = Business::Calendar.new(
   working_days: %w( mon tue wed thu fri ),
-  holidays: ["01/01/2014", "03/01/2014"]    # array items are either parseable date strings, or real Date objects
+  holidays: ["01/01/2014", "03/01/2014"],    # array items are either parseable date strings, or real Date objects
   extra_working_dates: [nil], # Makes the calendar to consider a weekend day as a working day.
 )
 ```
