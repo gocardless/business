@@ -82,10 +82,12 @@ RSpec.describe Business::Calendar do
   end
 
   describe ".new" do
-    it "allows to set optional name" do
+    it "allows to skip a name" do
       instance = described_class.new
       expect(instance.name).to eq nil
+    end
 
+    it "allows to set a name" do
       instance = described_class.new(name: "foo")
       expect(instance.name).to eq "foo"
     end
