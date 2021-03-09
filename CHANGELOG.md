@@ -1,3 +1,7 @@
+## 2.2.1 - March 9, 2021
+
+- Fix regression on `Calendar#new` #83 - thanks @ineu!
+
 ## 2.2.0 - March 4, 2021
 
 - Add `Business::Calendar#name` - thanks @mattmcf!
