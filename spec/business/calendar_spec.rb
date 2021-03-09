@@ -81,6 +81,16 @@ RSpec.describe Business::Calendar do
     end
   end
 
+  describe ".new" do
+    it "allows to set optional name" do
+      instance = described_class.new
+      expect(instance.name).to eq nil
+
+      instance = described_class.new(name: "foo")
+      expect(instance.name).to eq "foo"
+    end
+  end
+
   describe "#set_working_days" do
     subject(:set_working_days) { calendar.set_working_days(working_days) }
 
