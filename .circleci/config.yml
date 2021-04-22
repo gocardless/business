@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/ruby:<< parameters.ruby-version >>
+      - image: cimg/ruby:<< parameters.ruby-version >>
     parameters:
       ruby-version:
         type: string
@@ -34,4 +34,4 @@ workflows:
           name: Ruby << matrix.ruby-version >>
           matrix:
             parameters:
-              ruby-version: ["2.4.9", "2.5.8", "2.6.6", "2.7.1"]
+              ruby-version: ["2.5.9", "2.6.7", "2.7.3", "3.0.1"]

@@ -1,3 +1,7 @@
+## Upcoming
+
+- Removed support for Ruby 2.4
+
 ## 2.2.1 - March 9, 2021
 
 - Fix regression on `Calendar#new` #83 - thanks @ineu!
