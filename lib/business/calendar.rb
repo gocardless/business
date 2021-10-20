@@ -16,7 +16,6 @@ module Business
     end
     private_class_method :calendar_directories
 
-    # rubocop:disable Metrics/MethodLength
     def self.load(calendar_name)
       data = find_calendar_data(calendar_name)
       raise "No such calendar '#{calendar_name}'" unless data
@@ -32,7 +31,6 @@ module Business
         extra_working_dates: data["extra_working_dates"],
       )
     end
-    # rubocop:enable Metrics/MethodLength
 
     def self.find_calendar_data(calendar_name)
       calendar_directories.detect do |path|
@@ -157,7 +155,6 @@ module Business
     # This method counts from start of date1 to start of date2. So,
     # business_days_between(mon, weds) = 2 (assuming no holidays)
     # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/MethodLength
     def business_days_between(date1, date2)
       date1 = date1.to_date
       date2 = date2.to_date
@@ -190,9 +187,8 @@ module Business
       # Loop through each day in remaining_range and count if a business day
       num_biz_days + remaining_range.count { |a| business_day?(a) }
     end
-    # rubocop:enable Metrics/AbcSize
-    # rubocop:enable Metrics/MethodLength
 
+    # rubocop:enable Metrics/AbcSize
     def day_interval_for(date)
       date.is_a?(Date) ? 1 : 3600 * 24
     end
