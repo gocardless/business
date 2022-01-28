@@ -2,6 +2,7 @@
 
 require "yaml"
 require "date"
+require "pathname"
 
 module Business
   class Calendar
@@ -37,9 +38,10 @@ module Business
         if path.is_a?(Hash)
           break path[calendar_name] if path[calendar_name]
         else
-          next unless File.exist?(File.join(path, "#{calendar_name}.yml"))
+          calendar_path = Pathname.new(path).join("#{calendar_name}.yml")
+          next unless calendar_path.exist?
 
-          break YAML.load_file(File.join(path, "#{calendar_name}.yml"))
+          break YAML.safe_load(calendar_path.read, permitted_classes: [Date])
         end
       end
     end
