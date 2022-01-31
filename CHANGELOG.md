@@ -1,6 +1,9 @@
 ## Upcoming
 
-- Removed support for Ruby 2.4
+## 2.3.0 - Jan 31, 2022
+
+- Added permitted classes to YAML's `safe_load` #112 - thanks @attack
+- Removed support for Ruby 2.4, 2.5
 
 ## 2.2.1 - March 9, 2021
 
