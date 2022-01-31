@@ -6,7 +6,7 @@ working_days:
   - friday
 
 holidays:
-  - January 1st, 2013
+  - 2013-01-01
   - March 29th, 2013
   - April 1st, 2013
   - May 1st, 2013

@@ -13,9 +13,9 @@ RSpec.describe Business::Calendar do
     subject(:load_calendar) { described_class.load(calendar) }
 
     let(:dummy_calendar) { { "working_days" => ["monday"] } }
+    let(:fixture_path) { File.join(File.dirname(__FILE__), "../fixtures", "calendars") }
 
     before do
-      fixture_path = File.join(File.dirname(__FILE__), "../fixtures", "calendars")
       described_class.load_paths = [fixture_path, { "foobar" => dummy_calendar }]
     end
 
@@ -25,7 +25,10 @@ RSpec.describe Business::Calendar do
       after { described_class.load_paths = nil }
 
       it "loads the yaml file" do
-        expect(YAML).to receive(:load_file).with(/ecb\.yml$/).and_return({})
+        path = Pathname.new(fixture_path).join("ecb.yml")
+        expect(YAML).to receive(:safe_load).
+          with(path.read, permitted_classes: [Date]).
+          and_return({})
 
         load_calendar
       end
