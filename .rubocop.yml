@@ -11,3 +11,6 @@ Naming/AccessorMethodName:
 
 Gemspec/RequiredRubyVersion:
   Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
