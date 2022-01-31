@@ -156,7 +156,6 @@ module Business
     # Count the number of business days between two dates.
     # This method counts from start of date1 to start of date2. So,
     # business_days_between(mon, weds) = 2 (assuming no holidays)
-    # rubocop:disable Metrics/AbcSize
     def business_days_between(date1, date2)
       date1 = date1.to_date
       date2 = date2.to_date
@@ -190,7 +189,6 @@ module Business
       num_biz_days + remaining_range.count { |a| business_day?(a) }
     end
 
-    # rubocop:enable Metrics/AbcSize
     def day_interval_for(date)
       date.is_a?(Date) ? 1 : 3600 * 24
     end
