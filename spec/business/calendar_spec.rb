@@ -340,7 +340,7 @@ RSpec.describe Business::Calendar do
         context "followed by another non-business day" do
           let(:date) { date_class.parse("Saturday 5th Jan, 2013") }
 
-          it { is_expected.to eq(date + 2 * day_interval) }
+          it { is_expected.to eq(date + (2 * day_interval)) }
         end
       end
     end
@@ -368,7 +368,7 @@ RSpec.describe Business::Calendar do
         context "preceeded by another non-business day" do
           let(:date) { date_class.parse("Sunday 6th Jan, 2013") }
 
-          it { is_expected.to eq(date - 2 * day_interval) }
+          it { is_expected.to eq(date - (2 * day_interval)) }
         end
       end
     end
@@ -396,7 +396,7 @@ RSpec.describe Business::Calendar do
         context "followed by another non-business day" do
           let(:date) { date_class.parse("Saturday 5th Jan, 2013") }
 
-          it { is_expected.to eq(date + 2 * day_interval) }
+          it { is_expected.to eq(date + (2 * day_interval)) }
         end
       end
     end
@@ -424,7 +424,7 @@ RSpec.describe Business::Calendar do
         context "preceeded by another non-business day" do
           let(:date) { date_class.parse("Sunday 6th Jan, 2013") }
 
-          it { is_expected.to eq(date - 2 * day_interval) }
+          it { is_expected.to eq(date - (2 * day_interval)) }
         end
       end
     end
@@ -444,33 +444,33 @@ RSpec.describe Business::Calendar do
         context "and a period that includes only business days" do
           let(:date) { date_class.parse("Wednesday 2nd Jan, 2013") }
 
-          it { is_expected.to eq(date + delta * day_interval) }
+          it { is_expected.to eq(date + (delta * day_interval)) }
         end
 
         context "and a period that includes a weekend" do
           let(:date) { date_class.parse("Friday 4th Jan, 2013") }
 
-          it { is_expected.to eq(date + (delta + 2) * day_interval) }
+          it { is_expected.to eq(date + ((delta + 2) * day_interval)) }
         end
 
         context "and a period that includes a working date weekend" do
           let(:extra_working_dates) { ["Sunday 6th Jan, 2013"] }
           let(:date) { date_class.parse("Friday 4th Jan, 2013") }
 
-          it { is_expected.to eq(date + (delta + 1) * day_interval) }
+          it { is_expected.to eq(date + ((delta + 1) * day_interval)) }
         end
 
         context "and a period that includes a holiday day" do
           let(:date) { date_class.parse("Monday 31st Dec, 2012") }
 
-          it { is_expected.to eq(date + (delta + 1) * day_interval) }
+          it { is_expected.to eq(date + ((delta + 1) * day_interval)) }
         end
       end
 
       context "given a non-business day" do
         let(:date) { date_class.parse("Tuesday 1st Jan, 2013") }
 
-        it { is_expected.to eq(date + (delta + 1) * day_interval) }
+        it { is_expected.to eq(date + ((delta + 1) * day_interval)) }
       end
     end
 
@@ -489,33 +489,33 @@ RSpec.describe Business::Calendar do
         context "and a period that includes only business days" do
           let(:date) { date_class.parse("Wednesday 2nd Jan, 2013") }
 
-          it { is_expected.to eq(date - delta * day_interval) }
+          it { is_expected.to eq(date - (delta * day_interval)) }
         end
 
         context "and a period that includes a weekend" do
           let(:date) { date_class.parse("Monday 31st Dec, 2012") }
 
-          it { is_expected.to eq(date - (delta + 2) * day_interval) }
+          it { is_expected.to eq(date - ((delta + 2) * day_interval)) }
         end
 
         context "and a period that includes a working date weekend" do
           let(:extra_working_dates) { ["Saturday 29th Dec, 2012"] }
           let(:date) { date_class.parse("Monday 31st Dec, 2012") }
 
-          it { is_expected.to eq(date - (delta + 1) * day_interval) }
+          it { is_expected.to eq(date - ((delta + 1) * day_interval)) }
         end
 
         context "and a period that includes a holiday day" do
           let(:date) { date_class.parse("Friday 4th Jan, 2013") }
 
-          it { is_expected.to eq(date - (delta + 1) * day_interval) }
+          it { is_expected.to eq(date - ((delta + 1) * day_interval)) }
         end
       end
 
       context "given a non-business day" do
         let(:date) { date_class.parse("Thursday 3rd Jan, 2013") }
 
-        it { is_expected.to eq(date - (delta + 1) * day_interval) }
+        it { is_expected.to eq(date - ((delta + 1) * day_interval)) }
       end
     end
 
