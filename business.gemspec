@@ -22,6 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "gc_ruboconfig", "~> 3.2.0"
   spec.add_development_dependency "rspec", "~> 3.1"
   spec.add_development_dependency "rspec_junit_formatter", "~> 0.5.1"
-  spec.add_development_dependency "rubocop", "~> 1.30.0"
+  spec.add_development_dependency "rubocop", "~> 1.31.0"
   spec.metadata["rubygems_mfa_required"] = "true"
 end
