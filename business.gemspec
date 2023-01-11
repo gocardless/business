@@ -18,9 +18,8 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "gc_ruboconfig", "~> 3.3.0"
+  spec.add_development_dependency "gc_ruboconfig", "~> 3.6.0"
   spec.add_development_dependency "rspec", "~> 3.1"
-  spec.add_development_dependency "rspec_junit_formatter", "~> 0.5.1"
-  spec.add_development_dependency "rubocop", "~> 1.32.0"
+  spec.add_development_dependency "rubocop", "~> 1.43.0"
   spec.metadata["rubygems_mfa_required"] = "true"
 end
