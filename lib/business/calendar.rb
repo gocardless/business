@@ -129,10 +129,7 @@ module Business
     def add_business_days(date, delta)
       date = roll_forward(date)
       delta.times do
-        loop do
-          date += day_interval_for(date)
-          break date if business_day?(date)
-        end
+        date = next_business_day(date)
       end
       date
     end
@@ -145,10 +142,7 @@ module Business
     def subtract_business_days(date, delta)
       date = roll_backward(date)
       delta.times do
-        loop do
-          date -= day_interval_for(date)
-          break date if business_day?(date)
-        end
+        date = previous_business_day(date)
       end
       date
     end
