@@ -178,6 +178,13 @@ module Business
         in_range && on_biz_day
       end
 
+      num_biz_days += extra_working_dates.count do |extra_day|
+        in_range = full_weeks_range.cover?(extra_day)
+        # Add holiday if it is marked as extra working day
+        on_weekend = !working_days.include?(extra_day.strftime("%a").downcase)
+        in_range && on_weekend
+      end
+
       remaining_range = (date2 - remaining_days...date2)
       # Loop through each day in remaining_range and count if a business day
       num_biz_days + remaining_range.count { |a| business_day?(a) }
