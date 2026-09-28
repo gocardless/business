@@ -2,6 +2,7 @@
 
 require "business/calendar"
 require "time"
+require "fileutils"
 
 RSpec.configure do |config|
   config.mock_with(:rspec) { |mocks| mocks.verify_partial_doubles = true }
@@ -55,6 +56,71 @@ RSpec.describe Business::Calendar do
       let(:calendar) { "invalid-calendar" }
 
       specify { expect { load_calendar }.to raise_error(/No such calendar/) }
+    end
+
+    context "when given a calendar name that escapes the load path" do
+      before do
+        outside = File.join(File.dirname(__FILE__), "../fixtures")
+        FileUtils.mkdir_p(File.join(outside, "outside"))
+        File.write(
+          File.join(outside, "outside", "escaped.yml"),
+          { "working_days" => ["monday"] }.to_yaml,
+        )
+      end
+
+      after do
+        FileUtils.rm_rf(File.join(File.dirname(__FILE__), "../fixtures", "outside"))
+      end
+
+      context "with a relative traversal" do
+        let(:calendar) { "../outside/escaped" }
+
+        specify do
+          expect { load_calendar }.
+            to raise_error(ArgumentError, /invalid calendar name/)
+        end
+      end
+
+      context "with an absolute path" do
+        let(:calendar) do
+          File.join(File.dirname(__FILE__), "../fixtures", "outside", "escaped")
+        end
+
+        specify do
+          expect { load_calendar }.
+            to raise_error(ArgumentError, /invalid calendar name/)
+        end
+      end
+
+      context "with a bare path separator" do
+        let(:calendar) { "outside/escaped" }
+
+        specify do
+          expect { load_calendar }.
+            to raise_error(ArgumentError, /invalid calendar name/)
+        end
+      end
+
+      context "with a name that is only dots" do
+        let(:calendar) { ".." }
+
+        specify do
+          expect { load_calendar }.
+            to raise_error(ArgumentError, /invalid calendar name/)
+        end
+      end
+
+      context "when the escaping name is a key in a hash load path" do
+        before do
+          described_class.load_paths = [{ "../outside/escaped" => dummy_calendar }]
+        end
+
+        let(:calendar) { "../outside/escaped" }
+
+        it "still resolves, since hash lookups touch no filesystem" do
+          expect(load_calendar).to be_a described_class
+        end
+      end
     end
 
     context "when given a calendar that has invalid keys" do
