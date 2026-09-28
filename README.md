@@ -139,6 +139,16 @@ calendar.subtract_business_days(date, 4).strftime("%A, %d %B %Y")
 # => "Friday, 06 June 2014"
 ```
 
+For getting the next or previous business day, instead of passing `1` to `add_business_days` or `subtract_business_days`, `next_business_day` and `previous_business_day` could be used respectively:
+
+```ruby
+date = Date.parse("Friday, 13 June 2014")
+calendar.next_business_day(date).strftime("%A, %d %B %Y")
+# => "Monday, 16 June 2014"
+calendar.previous_business_day(date).strftime("%A, %d %B %Y")
+# => "Thursday, 12 June 2014"
+```
+
 The `roll_forward` and `roll_backward` methods snap a date to a nearby business day. If provided with a business day, they will return that date. Otherwise, they will advance (forward for `roll_forward` and backward for `roll_backward`) until a business day is found.
 
 ```ruby
