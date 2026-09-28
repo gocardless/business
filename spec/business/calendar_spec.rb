@@ -999,6 +999,33 @@ RSpec.describe Business::Calendar do
           it { is_expected.to eq(4) }
         end
       end
+
+      context "if a calendar has an extra working date" do
+        context "for a range less than a week long" do
+          let(:date_1) { "Fri 30/5/2014" }
+          let(:date_2) { "Tue 3/6/2014" }
+
+          it { is_expected.to eq(3) }
+        end
+
+        context "for a range more than a week long" do
+          let(:date_1) { "Mon 26/5/2014" }
+          let(:date_2) { "Mon 9/6/2014" }
+
+          it { is_expected.to eq(10) }
+        end
+
+        context "set after initialisation on a working day and a holiday" do
+          before do
+            calendar.set_extra_working_dates(["Wed 4/6/2014", "Sun 22/6/2014"])
+          end
+
+          let(:date_1) { "Mon 2/6/2014" }
+          let(:date_2) { "Mon 30/6/2014" }
+
+          it { is_expected.to eq(16) }
+        end
+      end
     end
   end
 

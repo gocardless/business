@@ -1,5 +1,9 @@
 ## Upcoming
 
+## 3.1.0 - Sept 28, 2026
+
+- Fix `business_days_between` not counting extra working dates in full weeks #34 - thanks @anatoliliotych!
+
 # 3.0.0 - Sept 29, 2026
 
 - Removed support for Ruby 3.2 and earlier
