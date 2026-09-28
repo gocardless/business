@@ -8,7 +8,7 @@ require "business/version"
 Gem::Specification.new do |spec|
   spec.name          = "business"
   spec.version       = Business::VERSION
-  spec.authors       = ["Harry Marr"]
+  spec.authors       = ["GoCcardless"]
   spec.email         = ["developers@gocardless.com"]
   spec.summary       = "Date calculations based on business calendars"
   spec.description   = "Date calculations based on business calendars"
@@ -18,8 +18,5 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "gc_ruboconfig", "~> 3.6.0"
-  spec.add_development_dependency "rspec", "~> 3.1"
-  spec.add_development_dependency "rubocop", "~> 1.48.1"
   spec.metadata["rubygems_mfa_required"] = "true"
 end

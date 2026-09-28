@@ -65,7 +65,7 @@ module Business
       set_working_days(working_days)
       set_holidays(holidays)
 
-      unless (@holidays & @extra_working_dates).none?
+      if @holidays.intersect?(@extra_working_dates)
         raise ArgumentError, "Holidays cannot be extra working dates"
       end
     end
@@ -178,7 +178,7 @@ module Business
         in_range && on_biz_day
       end
 
-      remaining_range = (date2 - remaining_days...date2)
+      remaining_range = ((date2 - remaining_days)...date2)
       # Loop through each day in remaining_range and count if a business day
       num_biz_days + remaining_range.count { |a| business_day?(a) }
     end
@@ -197,7 +197,7 @@ module Business
       extra_working_dates_names = @extra_working_dates.map do |d|
         d.strftime("%a").downcase
       end
-      return if (extra_working_dates_names & @working_days).none?
+      return if !extra_working_dates_names.intersect?(@working_days)
 
       raise ArgumentError, "Extra working dates cannot be on working days"
     end

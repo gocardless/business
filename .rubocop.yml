@@ -1,6 +1,10 @@
 inherit_gem:
   gc_ruboconfig: rubocop.yml
 
+AllCops:
+  TargetRubyVersion: 3.3
+  NewCops: enable
+
 RSpec/NestedGroups:
   Exclude:
     - spec/business/calendar_spec.rb
@@ -12,5 +16,5 @@ Naming/AccessorMethodName:
 Gemspec/RequiredRubyVersion:
   Enabled: false
 
-Style/HashSyntax:
+RSpec/IndexedLet:
   Enabled: false
