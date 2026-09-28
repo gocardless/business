@@ -7,13 +7,26 @@ on:
   pull_request:
 
 jobs:
+  rubocop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          # Maintain consistency with the TargetRubyVersion in .rubocop.yml
+          ruby-version: "3.3"
+      - name: Run rubocop
+        run: bundle exec rubocop --parallel --extra-details --display-style-guide
+
   tests:
     strategy:
       matrix:
-        ruby-version: ["2.6", "2.7", "3.0", "3.1", "3.2"]
+        ruby-version: ["3.3", "3.4", "4.0"]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -21,5 +34,3 @@ jobs:
           ruby-version: "${{ matrix.ruby-version }}"
       - name: Run tests
         run: bundle exec rspec
-      - name: Run rubocop
-        run: bundle exec rubocop --parallel --extra-details --display-style-guide
