@@ -46,7 +46,7 @@ calendar = Business::Calendar.new(
 
 Defining a calendar as a Ruby object may not be convenient, so we provide a way of defining these calendars as YAML. Below we will walk through the necessary [steps](#example-calendar) to build your first calendar. All keys are optional and will default to the following:
 
-Note: Elements of `holidays` and `extra_working_dates` may be either strings that `Date.parse()` [can understand](https://ruby-doc.org/stdlib-2.7.1/libdoc/date/rdoc/Date.html#method-c-parse), or `YYYY-MM-DD` (which is considered as a Date by Ruby YAML itself)[https://github.com/ruby/psych/blob/6ec6e475e8afcf7868b0407fc08014aed886ecf1/lib/psych/scalar_scanner.rb#L60].
+Note: Elements of `holidays` and `extra_working_dates` may be either strings that `Date.parse()` [can understand](https://ruby-doc.org/stdlib-2.7.1/libdoc/date/rdoc/Date.html#method-c-parse), or `YYYY-MM-DD` [which is considered as a Date by Ruby YAML itself](https://github.com/ruby/psych/blob/6ec6e475e8afcf7868b0407fc08014aed886ecf1/lib/psych/scalar_scanner.rb#L60).
 
 #### YAML file Structure
 
