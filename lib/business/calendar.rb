@@ -194,6 +194,15 @@ module Business
         in_range && on_biz_day
       end
 
+      num_biz_days += extra_working_dates.count do |extra_day|
+        in_range = full_weeks_range.cover?(extra_day)
+        # Only pick an extra working date if it's on a non-working day (e.g., a
+        # weekend) and not a holiday, as the setters bypass that validation
+        on_non_working_day =
+          !working_days.include?(extra_day.strftime("%a").downcase)
+        in_range && on_non_working_day && !holiday?(extra_day)
+      end
+
       remaining_range = ((date2 - remaining_days)...date2)
       # Loop through each day in remaining_range and count if a business day
       num_biz_days + remaining_range.count { |a| business_day?(a) }

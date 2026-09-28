@@ -694,7 +694,7 @@ RSpec.describe Business::Calendar do
             let(:date_1) { "Wed 28/5/2014" }
             let(:date_2) { "Thu 12/6/2014" }
 
-            it { is_expected.to eq(11) }
+            it { is_expected.to eq(12) }
           end
         end
 
@@ -717,7 +717,7 @@ RSpec.describe Business::Calendar do
             let(:date_1) { "Wed 25/6/2014" }
             let(:date_2) { "Tue 8/7/2014" }
 
-            it { is_expected.to eq(8) }
+            it { is_expected.to eq(9) }
           end
         end
       end
@@ -749,7 +749,7 @@ RSpec.describe Business::Calendar do
             let(:date_1) { "Sat 31/5/2014" }
             let(:date_2) { "Fri 13/6/2014" }
 
-            it { is_expected.to eq(8) }
+            it { is_expected.to eq(9) }
           end
         end
 
@@ -764,7 +764,7 @@ RSpec.describe Business::Calendar do
             let(:date_1) { "Sat 31/5/2014" }
             let(:date_2) { "Sun 8/6/2014" }
 
-            it { is_expected.to be(5) }
+            it { is_expected.to eq(6) }
           end
 
           context "including business, weekend days, and holidays" do
@@ -775,9 +775,9 @@ RSpec.describe Business::Calendar do
 
           context "including business, weekend, holiday days & working date" do
             let(:date_1) { "Sat 31/5/2014" }
-            let(:date_2) { "Sun 14/6/2014" }
+            let(:date_2) { "Sun 15/6/2014" }
 
-            it { is_expected.to be(9) }
+            it { is_expected.to be(10) }
           end
         end
 
@@ -792,7 +792,7 @@ RSpec.describe Business::Calendar do
             let(:date_1) { "Sat 31/5/2014" }
             let(:date_2) { "Thu 12/6/2014" }
 
-            it { is_expected.to eq(8) }
+            it { is_expected.to eq(9) }
           end
         end
 
@@ -812,9 +812,9 @@ RSpec.describe Business::Calendar do
           end
 
           context "including business, weekend days, holidays & working date" do
-            let(:date_2) { "Tue 13/6/2014" }
+            let(:date_2) { "Fri 13/6/2014" }
 
-            it { is_expected.to eq(8) }
+            it { is_expected.to eq(9) }
           end
         end
       end
@@ -873,10 +873,10 @@ RSpec.describe Business::Calendar do
           end
 
           context "including business/weekend days, holidays & working date" do
-            let(:date_1) { "27/5/2014" }
+            let(:date_1) { "Tue 27/5/2014" }
             let(:date_2) { "Thu 12/6/2014" }
 
-            it { is_expected.to eq(11) }
+            it { is_expected.to eq(12) }
           end
         end
 
@@ -916,13 +916,13 @@ RSpec.describe Business::Calendar do
           context "including working date, working & weekend days" do
             let(:date_2) { "Tue 10/6/2014" }
 
-            it { is_expected.to eq(6) }
+            it { is_expected.to eq(7) }
           end
 
           context "including working date, working & weekend days & holiday" do
-            let(:date_2) { "Tue 13/6/2014" }
+            let(:date_2) { "Fri 13/6/2014" }
 
-            it { is_expected.to eq(8) }
+            it { is_expected.to eq(9) }
           end
         end
 
@@ -979,7 +979,7 @@ RSpec.describe Business::Calendar do
             let(:date_1) { "Sat 28/6/2014" }
             let(:date_2) { "Sat 5/7/2014" }
 
-            it { is_expected.to eq(4) }
+            it { is_expected.to eq(5) }
           end
         end
       end
@@ -997,6 +997,33 @@ RSpec.describe Business::Calendar do
           let(:date_2) { "Tue 24/6/2014" }
 
           it { is_expected.to eq(4) }
+        end
+      end
+
+      context "if a calendar has an extra working date" do
+        context "for a range less than a week long" do
+          let(:date_1) { "Fri 30/5/2014" }
+          let(:date_2) { "Tue 3/6/2014" }
+
+          it { is_expected.to eq(3) }
+        end
+
+        context "for a range more than a week long" do
+          let(:date_1) { "Mon 26/5/2014" }
+          let(:date_2) { "Mon 9/6/2014" }
+
+          it { is_expected.to eq(10) }
+        end
+
+        context "set after initialisation on a working day and a holiday" do
+          before do
+            calendar.set_extra_working_dates(["Wed 4/6/2014", "Sun 22/6/2014"])
+          end
+
+          let(:date_1) { "Mon 2/6/2014" }
+          let(:date_2) { "Mon 30/6/2014" }
+
+          it { is_expected.to eq(16) }
         end
       end
     end
