@@ -1,5 +1,10 @@
 ## Upcoming
 
+# 3.0.0 - Sept 29, 2026
+
+- Removed support for Ruby 3.2 and earlier
+- Prevent path traversal when loading calendar files #331
+
 ## 2.3.0 - Jan 31, 2022
 
 - Added permitted classes to YAML's `safe_load` #112 - thanks @attack
