@@ -8,6 +8,11 @@ module Business
   class Calendar
     VALID_KEYS = %w[holidays working_days extra_working_dates].freeze
 
+    # Calendar names are interpolated into a filesystem path, so restrict them to
+    # plain identifiers: anything containing path separators, "..", or an absolute
+    # path would otherwise load a file from outside the configured load_paths.
+    CALENDAR_NAME_FORMAT = /\A[a-zA-Z0-9_-]+\z/
+
     class << self
       attr_accessor :load_paths
     end
@@ -38,13 +43,24 @@ module Business
         if path.is_a?(Hash)
           break path[calendar_name] if path[calendar_name]
         else
-          calendar_path = Pathname.new(path).join("#{calendar_name}.yml")
+          calendar_path = calendar_path_for(path, calendar_name)
           next unless calendar_path.exist?
 
           break YAML.safe_load(calendar_path.read, permitted_classes: [Date])
         end
       end
     end
+
+    # Only applied to directory load_paths; hash load_paths are a plain key
+    # lookup and cannot escape anywhere, so their keys stay unrestricted.
+    def self.calendar_path_for(directory, calendar_name)
+      unless calendar_name.to_s.match?(CALENDAR_NAME_FORMAT)
+        raise ArgumentError, "invalid calendar name: #{calendar_name.inspect}"
+      end
+
+      Pathname.new(directory).join("#{calendar_name}.yml")
+    end
+    private_class_method :calendar_path_for
 
     @lock = Mutex.new
     def self.load_cached(calendar)
@@ -65,7 +81,7 @@ module Business
       set_working_days(working_days)
       set_holidays(holidays)
 
-      unless (@holidays & @extra_working_dates).none?
+      if @holidays.intersect?(@extra_working_dates)
         raise ArgumentError, "Holidays cannot be extra working dates"
       end
     end
@@ -178,7 +194,7 @@ module Business
         in_range && on_biz_day
       end
 
-      remaining_range = (date2 - remaining_days...date2)
+      remaining_range = ((date2 - remaining_days)...date2)
       # Loop through each day in remaining_range and count if a business day
       num_biz_days + remaining_range.count { |a| business_day?(a) }
     end
@@ -197,7 +213,7 @@ module Business
       extra_working_dates_names = @extra_working_dates.map do |d|
         d.strftime("%a").downcase
       end
-      return if (extra_working_dates_names & @working_days).none?
+      return if !extra_working_dates_names.intersect?(@working_days)
 
       raise ArgumentError, "Extra working dates cannot be on working days"
     end
