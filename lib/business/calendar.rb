@@ -209,7 +209,13 @@ module Business
     end
 
     def day_interval_for(date)
-      date.is_a?(Date) ? 1 : 3600 * 24
+      if date.is_a?(Date)
+        1
+      elsif defined?(ActiveSupport::TimeWithZone) && date.is_a?(ActiveSupport::TimeWithZone)
+        1.day
+      else
+        3600 * 24
+      end
     end
 
     # Internal method for assigning working days from a calendar config.
