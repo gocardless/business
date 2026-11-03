@@ -1,5 +1,9 @@
 ## Upcoming
 
+## 3.2.0 - Nov 3, 2026
+
+- Advance `ActiveSupport::TimeWithZone`s whole days across DST boundaries #339
+
 ## 3.1.0 - Sept 28, 2026
 
 - Fix `business_days_between` not counting extra working dates in full weeks #34 - thanks @anatoliliotych!
