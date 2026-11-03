@@ -1049,4 +1049,18 @@ RSpec.describe Business::Calendar do
 
     it_behaves_like "common"
   end
+
+  context "(using TimeWithZone objects)" do
+    before do
+      stub_const("ActiveSupport::TimeWithZone", Class.new(Time))
+      Integer.define_method(:day) { self * 60 * 60 * 24 }
+    end
+
+    after { Integer.remove_method(:day) }
+
+    let(:date_class) { ActiveSupport::TimeWithZone }
+    let(:day_interval) { 1.day }
+
+    it_behaves_like "common"
+  end
 end
